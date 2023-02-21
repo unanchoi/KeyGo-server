@@ -2,6 +2,8 @@ server:
   port: 8080
 
 spring:
+  config:
+    import: application-config.yml
   datasource:
     url: jdbc:h2:tcp://localhost/~/keygo;NON_KEYWORDS=USER
     username: sa

@@ -2,7 +2,7 @@ package maddori.keygo.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import maddori.keygo.team.TeamResponseDto;
+import maddori.keygo.dto.team.TeamResponseDto;
 import maddori.keygo.domain.entity.Team;
 import maddori.keygo.repository.TeamRepository;
 import org.springframework.stereotype.Service;
@@ -23,4 +23,5 @@ public class TeamService {
                             .build();
          return response;
     }
+
 }

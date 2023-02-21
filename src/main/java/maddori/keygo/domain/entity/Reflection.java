@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import maddori.keygo.domain.ReflectionState;
 import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -24,7 +25,6 @@ public class Reflection {
     @Column(name = "reflection_name", length = 15)
     private String reflectionName;
 
-    @CreatedDate
     @Column
     private LocalDateTime date;
 

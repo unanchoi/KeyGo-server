@@ -11,7 +11,7 @@ public class User {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false, length = 6)
+    @Column(length = 6)
     private String username;
 
     @Column(nullable = false)
@@ -19,7 +19,8 @@ public class User {
 
     private String sub;
 
-    @OneToOne(mappedBy = "user")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="usertoken", referencedColumnName = "id", nullable = false)
     private UserToken userToken;
 
 }

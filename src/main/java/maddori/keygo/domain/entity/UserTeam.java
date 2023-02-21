@@ -22,7 +22,7 @@ public class UserTeam {
     @JoinColumn(name="team_id", referencedColumnName = "id", nullable = false)
     private Team team;
 
-    @Column(length = 6)
+    @Column(length = 6, nullable = false)
     private String nickname;
 
     @Column(length = 20)

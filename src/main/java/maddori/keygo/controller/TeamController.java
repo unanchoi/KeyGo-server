@@ -1,7 +1,7 @@
 package maddori.keygo.controller;
 
 import maddori.keygo.service.TeamService;
-import maddori.keygo.team.TeamResponseDto;
+import maddori.keygo.dto.team.TeamResponseDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
