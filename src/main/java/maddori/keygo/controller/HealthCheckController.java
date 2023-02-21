@@ -1,4 +1,4 @@
-package maddori.keygo.domain.controller;
+package maddori.keygo.controller;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

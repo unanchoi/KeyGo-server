@@ -1,14 +1,12 @@
-package maddori.keygo.domain.Service;
+package maddori.keygo.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import maddori.keygo.domain.dto.team.TeamResponseDto;
+import maddori.keygo.team.TeamResponseDto;
 import maddori.keygo.domain.entity.Team;
 import maddori.keygo.repository.TeamRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor

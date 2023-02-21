@@ -1,4 +1,4 @@
-package maddori.keygo.domain.dto.team;
+package maddori.keygo.team;
 
 import lombok.Builder;
 import lombok.Data;
