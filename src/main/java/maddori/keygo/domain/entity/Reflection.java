@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import maddori.keygo.domain.ReflectionState;
+import org.hibernate.annotations.ColumnDefault;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
@@ -18,7 +19,7 @@ public class Reflection {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="team_id", referencedColumnName = "id", nullable = false)
     private Team team;
 
@@ -28,6 +29,7 @@ public class Reflection {
     @Column
     private LocalDateTime date;
 
+    @Column(nullable = false, columnDefinition = "VARCHAR(255) default 'SettingRequired'")
     @Enumerated(EnumType.STRING)
     private ReflectionState state;
 

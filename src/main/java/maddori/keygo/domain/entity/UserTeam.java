@@ -30,7 +30,7 @@ public class UserTeam {
 
     private String profileImagePath;
 
-    private Byte admin;
+    private Boolean admin;
 
 
 }

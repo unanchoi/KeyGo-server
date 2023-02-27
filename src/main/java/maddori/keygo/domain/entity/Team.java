@@ -13,11 +13,11 @@ public class Team {
     private Long id;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "current_reflection_id", nullable = false)
+    @JoinColumn(name = "current_reflection_id", referencedColumnName = "id", nullable = false)
     private Reflection currentReflection;
 
     @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "recent_reflection_id")
+    @JoinColumn(name = "recent_reflection_id", referencedColumnName = "id")
     private Reflection recentReflection;
 
     @Column(length = 6, nullable = false)
