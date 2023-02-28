@@ -19,9 +19,4 @@ public class User {
 
     @Column(nullable = false)
     private String sub;
-
-    @OneToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="usertoken", referencedColumnName = "id", nullable = false)
-    private UserToken userToken;
-
 }
