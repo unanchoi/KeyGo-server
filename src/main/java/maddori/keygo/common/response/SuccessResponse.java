@@ -15,7 +15,7 @@ import org.springframework.lang.Nullable;
 @Setter
 public class SuccessResponse extends BasicResponse {
     @Nullable
-    private Object data;
+    private Object detail;
 
     public static ResponseEntity<BasicResponse> toResponseEntity(ResponseCode responseCode, @Nullable Object data) {
         return ResponseEntity
@@ -23,7 +23,7 @@ public class SuccessResponse extends BasicResponse {
                 .body(SuccessResponse.builder()
                         .success(responseCode.getSuccess())
                         .message(responseCode.getMessage())
-                        .data(data)
+                        .detail(data)
                         .build()
                 );
     }

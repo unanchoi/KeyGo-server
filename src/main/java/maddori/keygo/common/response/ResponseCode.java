@@ -37,7 +37,6 @@ public enum ResponseCode {
     PROFILE_IMAGE_FORMAT_ERROR(HttpStatus.BAD_REQUEST, false, "이미지 파일만 업로드할 수 있습니다"),
     GET_USER_TEAM_LIST_SUCCESS(HttpStatus.OK, true, "유저의 팀 목록 가져오기 성공"),
     ALREADY_TEAM_MEMBER(HttpStatus.BAD_REQUEST, false, "이미 유저가 해당 팀에 합류된 상태"),
-    USER_TEAM_WITHDRAW(HttpStatus.BAD_REQUEST, false, "유저와 팀 정보가 잘못됨"),
 
     // reflection
     UPDATE_REFLECTION_DETAIL_SUCCESS(HttpStatus.OK, true, "회고 디테일 정보 추가 성공"),
@@ -70,6 +69,8 @@ public enum ResponseCode {
     UPDATE_FEEDBACK_SUCCESS(HttpStatus.CREATED, true, "피드백 수정 성공"),
     UPDATE_FEEDBACK_OTHERS_ERROR(HttpStatus.BAD_REQUEST, false, "타 유저가 작성한 피드백에 대한 수정 권한 없음"),
     NOT_INCLUDED_FEEDBACK(HttpStatus.BAD_REQUEST, false, "피드백이 회고에 속하지 않음");
+
+    // 입력값 형식 관련
 
     private final HttpStatus httpStatus;
     private final Boolean success;
