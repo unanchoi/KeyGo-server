@@ -1,5 +1,8 @@
 package maddori.keygo.controller;
 
+import com.nimbusds.jose.shaded.gson.Gson;
+import lombok.Builder;
+import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import maddori.keygo.common.response.BasicResponse;
 import maddori.keygo.common.response.ResponseCode;
@@ -23,6 +26,17 @@ public class ReflectionController {
             @PathVariable("teamId") Long teamId
     ) {
         List<ReflectionResponseDto> reflectionResponseDtoList = reflectionService.getPastReflectionList(teamId);
-        return SuccessResponse.toResponseEntity(ResponseCode.GET_REFLECTION_LIST_SUCCESS, reflectionResponseDtoList);
+        ReflectionListResponseDto responseData = ReflectionListResponseDto.builder()
+                .reflection(reflectionResponseDtoList)
+                .build();
+
+        return SuccessResponse.toResponseEntity(ResponseCode.GET_REFLECTION_LIST_SUCCESS, responseData);
+    }
+
+    @Data
+    @Builder
+    public static class ReflectionListResponseDto {
+        private List<ReflectionResponseDto> reflection;
     }
 }
+
