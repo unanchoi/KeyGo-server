@@ -5,6 +5,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import maddori.keygo.common.response.BasicResponse;
+import maddori.keygo.common.response.FailResponse;
 import maddori.keygo.common.response.ResponseCode;
 import maddori.keygo.common.response.SuccessResponse;
 import maddori.keygo.dto.reflection.ReflectionResponseDto;
@@ -25,12 +26,18 @@ public class ReflectionController {
     public ResponseEntity<? extends BasicResponse> getPastReflectionList(
             @PathVariable("teamId") Long teamId
     ) {
-        List<ReflectionResponseDto> reflectionResponseDtoList = reflectionService.getPastReflectionList(teamId);
-        ReflectionListResponseDto responseData = ReflectionListResponseDto.builder()
-                .reflection(reflectionResponseDtoList)
-                .build();
+        try {
+            List<ReflectionResponseDto> reflectionResponseDtoList = reflectionService.getPastReflectionList(teamId);
+            ReflectionListResponseDto responseData = ReflectionListResponseDto.builder()
+                    .reflection(reflectionResponseDtoList)
+                    .build();
 
-        return SuccessResponse.toResponseEntity(ResponseCode.GET_REFLECTION_LIST_SUCCESS, responseData);
+            return SuccessResponse.toResponseEntity(ResponseCode.GET_REFLECTION_LIST_SUCCESS, responseData);
+        }
+        catch (RuntimeException e) {
+            return FailResponse.toResponseEntity(ResponseCode.GET_REFLECTION_LIST_FAIL);
+        }
+
     }
 
     @Data
