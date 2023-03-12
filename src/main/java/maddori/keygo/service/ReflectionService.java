@@ -1,6 +1,7 @@
 package maddori.keygo.service;
 
 import lombok.RequiredArgsConstructor;
+import maddori.keygo.domain.ReflectionState;
 import maddori.keygo.domain.entity.Reflection;
 import maddori.keygo.dto.reflection.ReflectionResponseDto;
 import maddori.keygo.repository.ReflectionRepository;
@@ -18,7 +19,7 @@ public class ReflectionService {
 
     @Transactional(readOnly = true)
     public List<ReflectionResponseDto> getPastReflectionList(Long teamId) {
-        List<Reflection> reflectionList = reflectionRepository.findReflectionsByTeam_Id(teamId);
+        List<Reflection> reflectionList = reflectionRepository.findReflectionsByStateAndTeam_Id( ReflectionState.Done, teamId);
         List<ReflectionResponseDto> result = reflectionList.stream()
                 .map(r -> ReflectionResponseDto.builder()
                         .id(r.getId())
