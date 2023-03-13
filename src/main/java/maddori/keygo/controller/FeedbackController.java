@@ -19,7 +19,7 @@ public class FeedbackController {
 
     private final FeedbackService feedbackService;
 
-    @DeleteMapping("/{teamId}/reflections/{reflectionId}/feedbacks/{feedbackId}}")
+    @DeleteMapping("/{teamId}/reflections/{reflectionId}/feedbacks/{feedbackId}")
     public ResponseEntity<? extends BasicResponse> deleteFeedback(
             @PathVariable("teamId") Long teamId,
             @PathVariable("reflectionId") Long reflectionId,
