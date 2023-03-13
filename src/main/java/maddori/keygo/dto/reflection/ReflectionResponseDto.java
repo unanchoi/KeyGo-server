@@ -1,5 +1,6 @@
 package maddori.keygo.dto.reflection;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
 import maddori.keygo.domain.ReflectionState;
@@ -10,9 +11,13 @@ import java.time.LocalDateTime;
 public class ReflectionResponseDto {
 
     private Long id;
+
+    @JsonProperty("reflection_name")
     private String reflectionName;
     private LocalDateTime date;
     private ReflectionState state;
+
+    @JsonProperty("team_id")
     private Long teamId;
 
     @Builder
