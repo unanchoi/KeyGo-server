@@ -43,7 +43,7 @@ public enum ResponseCode {
     REFLECTION_TIME_BEFORE(HttpStatus.BAD_REQUEST, false, "회고 시간이 현 시간 이전"),
     DELETE_REFLECTION_DETAIL_SUCCESS(HttpStatus.OK, true, "회고 디테일 정보 삭제 성공"),
     GET_REFLECTION_LIST_SUCCESS(HttpStatus.OK, true, "회고목록 조회 성공"),
-    GET_REFLECTION_LIST_FAIL(HttpStatus.OK, true, "회고목록 조회 실패"),
+    GET_REFLECTION_LIST_FAIL(HttpStatus.BAD_REQUEST, true, "회고목록 조회 실패"),
 
     END_REFLECTION_SUCCESS(HttpStatus.OK, true, "회고 종료 성공"),
     GET_CURRENT_REFLECTION_SUCCESS(HttpStatus.OK, true, "현재 회고 정보 가져오기 성공"),
