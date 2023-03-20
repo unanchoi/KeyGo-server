@@ -1,7 +1,9 @@
 package maddori.keygo.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Builder;
 import lombok.Data;
+import maddori.keygo.domain.entity.Team;
 import maddori.keygo.dto.team.TeamResponseDto;
 
 @Data
@@ -16,4 +18,18 @@ public class UserTeamResponseDto {
     @JsonProperty("user_id")
     private Long userId;
     private TeamResponseDto team;
+
+    @Builder
+    public UserTeamResponseDto(Long id, String nickname, String role, String profileImagePath, Long userId, Team team) {
+        this.id = id;
+        this.nickname = nickname;
+        this.role = role;
+        this.profileImagePath = profileImagePath;
+        this.userId = userId;
+        this.team = TeamResponseDto.builder()
+                .id(team.getId())
+                .teamName(team.getTeamName())
+                .invitationCode(team.getInvitationCode())
+                .build();
+    }
 }

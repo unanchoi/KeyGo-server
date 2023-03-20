@@ -1,6 +1,7 @@
 package maddori.keygo.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -34,5 +35,12 @@ public class UserTeam {
 
     private Boolean admin;
 
-
+    @Builder
+    public UserTeam(User user, Team team, String nickname, String role) {
+        this.user = user;
+        this.team = team;
+        this.nickname = nickname;
+        this.role = role;
+        this.profileImagePath = "empty";
+    }
 }
