@@ -25,7 +25,7 @@ public class Feedback {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name="to_id", referencedColumnName = "id", nullable = false)
-    private User toId;
+    private User toUser;
 
     @Enumerated(EnumType.STRING)
     private CssType type;
