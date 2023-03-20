@@ -2,9 +2,7 @@ package maddori.keygo.controller;
 
 import jakarta.persistence.Basic;
 import lombok.RequiredArgsConstructor;
-import maddori.keygo.common.exception.CustomException;
 import maddori.keygo.common.response.BasicResponse;
-import maddori.keygo.common.response.NoDetailSuccessResponse;
 import maddori.keygo.common.response.SuccessResponse;
 import maddori.keygo.dto.team.TeamNameResponseDto;
 import maddori.keygo.service.TeamService;
