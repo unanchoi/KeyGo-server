@@ -6,6 +6,8 @@ import maddori.keygo.domain.entity.Feedback;
 import maddori.keygo.domain.entity.Reflection;
 import maddori.keygo.domain.entity.Team;
 import maddori.keygo.domain.entity.User;
+import maddori.keygo.dto.feedback.FeedbackUpdateRequestDto;
+import maddori.keygo.dto.feedback.FeedbackUpdateResponseDto;
 import maddori.keygo.repository.FeedbackRepository;
 import maddori.keygo.repository.ReflectionRepository;
 import maddori.keygo.repository.TeamRepository;
@@ -36,10 +38,14 @@ public class FeedbackServiceTest {
     @Autowired
     FeedbackRepository feedbackRepository;
 
+    @Autowired
+    FeedbackService feedbackService;
+
     @Test
     public void updateFeedbackSuccess() throws Exception {
         //given
         Team team = createTeam();
+        Reflection reflection = createReflection(team);
         Feedback feedback = Feedback.builder()
                 .id(1L)
                 .startContent("start content")
@@ -48,22 +54,28 @@ public class FeedbackServiceTest {
                 .fromUser(createFromUser())
                 .type(CssType.Continue)
                 .team(team)
-                .reflection(createReflection(team))
+                .reflection(reflection)
                 .keyword("keyword")
                 .build();
         feedbackRepository.save(feedback);
 
-        Feedback feedback1 = feedbackRepository.findById(1L).get();
-        feedback1.updateFeedback(CssType.Stop, "updated keyword", "content test");
-        feedbackRepository.save(feedback1);
+        FeedbackUpdateResponseDto dto = feedbackService.update(
+                team.getId(),
+                reflection.getId(),
+                feedback.getId(),
+                FeedbackUpdateRequestDto.builder()
+                        .type(CssType.Continue.getValue())
+                        .keyword("keyword update")
+                        .content("content update")
+                        .build());
 
         //when
         Feedback updatedFeedback = feedbackRepository.findById(1L).get();
         System.out.println("updatedFeedback : " +  updatedFeedback);
         //then
-        assertThat(feedback1.getType()).isEqualTo(updatedFeedback.getType());
-        assertThat(feedback1.getKeyword()).isEqualTo(updatedFeedback.getKeyword());
-        assertThat(feedback1.getContent()).isEqualTo(updatedFeedback.getContent());
+        assertThat(dto.getType()).isEqualTo(updatedFeedback.getType().toString());
+        assertThat(dto.getKeyword()).isEqualTo(updatedFeedback.getKeyword());
+        assertThat(dto.getContent()).isEqualTo(updatedFeedback.getContent());
 
     }
 
