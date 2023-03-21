@@ -1,11 +1,14 @@
 package maddori.keygo.domain.entity;
 
 import jakarta.persistence.*;
+import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 import maddori.keygo.domain.CssType;
 
 @Entity
 @NoArgsConstructor
+@Getter
 public class Feedback {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -39,4 +42,16 @@ public class Feedback {
     @Column(length = 200)
     private String startContent;
 
+    @Builder
+    public Feedback(Long id, Team team, Reflection reflection, User fromUser, User toUser, CssType type, String keyword, String content, String startContent) {
+        this.id = id;
+        this.team = team;
+        this.reflection = reflection;
+        this.fromUser = fromUser;
+        this.toUser = toUser;
+        this.type = type;
+        this.keyword = keyword;
+        this.content = content;
+        this.startContent = startContent;
+    }
 }

@@ -5,7 +5,7 @@ spring:
   config:
     import: application-config.yml
   datasource:
-    url: jdbc:h2:tcp://localhost/~/keygo;NON_KEYWORDS=USER
+    url: jdbc:h2:tcp://localhost/~/keygo;NON_KEYWORDS=USER;DATABASE_TO_UPPER=false;
     username: sa
     password:
     driver-class-name: org.h2.Driver
@@ -20,7 +20,7 @@ spring:
       matching-strategy: ant_path_matcher
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     properties:
       hibernate:
         show_sql: true

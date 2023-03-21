@@ -33,4 +33,12 @@ public class Reflection {
     @Enumerated(EnumType.STRING)
     private ReflectionState state;
 
+    @Builder
+    public Reflection(Long id, Team team, String reflectionName, LocalDateTime date, ReflectionState state) {
+        this.id = id;
+        this.team = team;
+        this.reflectionName = reflectionName;
+        this.date = date;
+        this.state = state;
+    }
 }

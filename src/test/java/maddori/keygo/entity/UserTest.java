@@ -19,13 +19,14 @@ public class UserTest {
 
     @Test
     public void userCreateSuccess() throws Exception {
-    //given
+
         User user1 =  User.builder()
                 .id(1L)
                 .username("user")
                 .email("admin@admin.com")
                 .sub("123412341234")
                 .build();
+
         userRepository.save(user1);
     //when
         User user2 = userRepository.findById(1L).get();
