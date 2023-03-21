@@ -20,7 +20,7 @@ public class Reflection {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name="team_id", referencedColumnName = "id")
+    @JoinColumn(name="team_id", referencedColumnName = "id", nullable = false)
     private Team team;
 
     @Column(name = "reflection_name", length = 15)
