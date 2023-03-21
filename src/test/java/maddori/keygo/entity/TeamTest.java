@@ -2,8 +2,6 @@ package maddori.keygo.entity;
 
 import maddori.keygo.domain.entity.Team;
 import maddori.keygo.repository.TeamRepository;
-import maddori.keygo.repository.UserRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,9 +15,6 @@ public class TeamTest {
 
     @Autowired
     TeamRepository teamRepository;
-
-    @Autowired
-    UserRepository userRepository;
 
     @Test
     public void teamCreateSuccess() throws Exception {
