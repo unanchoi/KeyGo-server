@@ -5,11 +5,15 @@ import maddori.keygo.common.exception.CustomException;
 import maddori.keygo.common.response.ResponseCode;
 import maddori.keygo.domain.CssType;
 import maddori.keygo.domain.entity.Feedback;
+import maddori.keygo.dto.feedback.FeedbackResponseDto;
 import maddori.keygo.dto.feedback.FeedbackUpdateRequestDto;
 import maddori.keygo.dto.feedback.FeedbackUpdateResponseDto;
 import maddori.keygo.dto.user.UserDto;
 import maddori.keygo.repository.FeedbackRepository;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -46,12 +50,28 @@ public class FeedbackService {
         return feedbackUpdateResponseDto;
     }
 
+    public List<FeedbackResponseDto> getFeedbackList(String type, Long teamId, Long reflectionId) {
+        return feedbackRepository.findAllByTypeAndReflectionId(toType(type), reflectionId)
+                .stream()
+                .map(feedback -> FeedbackResponseDto.builder()
+                        .id(feedback.getId())
+                        .type(feedback.getType().getValue())
+                        .keyword(feedback.getKeyword())
+                        .content(feedback.getContent())
+                        .fromUser(UserDto.builder()
+                                .id(feedback.getToUser().getId())
+                                .nickName(feedback.getToUser().getUsername())
+                                .build())
+                        .build())
+                .collect(Collectors.toList());
+    }
+
     private CssType toType(String type) {
         CssType value = switch (type)
         {
             case "Continue" -> CssType.Continue;
             case "Stop" -> CssType.Stop;
-            default -> CssType.Continue;
+            default -> throw new CustomException(ResponseCode.BAD_REQUEST);
         };
         return value;
     }
