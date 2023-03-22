@@ -8,6 +8,7 @@ import maddori.keygo.domain.entity.Feedback;
 import maddori.keygo.dto.feedback.FeedbackResponseDto;
 import maddori.keygo.dto.feedback.FeedbackUpdateRequestDto;
 import maddori.keygo.dto.feedback.FeedbackUpdateResponseDto;
+import maddori.keygo.dto.feedback.FeedbackUserAndTeamResponseDto;
 import maddori.keygo.dto.user.UserDto;
 import maddori.keygo.repository.FeedbackRepository;
 import org.springframework.stereotype.Service;
@@ -66,6 +67,51 @@ public class FeedbackService {
                 .collect(Collectors.toList());
     }
 
+    // TODO: userID 맞춰서 수정.
+    public FeedbackUserAndTeamResponseDto getUserAndTeamFeedbackList(
+            Long userId,
+            Long teamId,
+            Long reflectionId,
+            Long memberId
+    ) {
+        // 팀의 회고 중에서, 본인이 쓴 feedback
+        List<FeedbackResponseDto> userFeedbackList =
+        feedbackRepository.findAllByFromUserIdAndReflectionId(userId, reflectionId)
+                .stream().map(feedback -> FeedbackResponseDto.builder()
+                        .id(feedback.getId())
+                        .type(feedback.getType().getValue())
+                        .keyword(feedback.getKeyword())
+                        .content(feedback.getContent())
+                        .fromUser(UserDto.builder()
+                                .id(feedback.getToUser().getId())
+                                .nickName(feedback.getToUser().getUsername())
+                                .build())
+                        .build())
+                .collect(Collectors.toList());
+
+
+        // 팀의 회고 중에서, 본인을 제외한 팀의 피드백
+        List<FeedbackResponseDto> teamFeedbackList =
+                feedbackRepository.findAllExceptFromUserIdAndReflectionId(userId, reflectionId)
+                        .stream().map(feedback -> FeedbackResponseDto.builder()
+                                .id(feedback.getId())
+                                .type(feedback.getType().getValue())
+                                .keyword(feedback.getKeyword())
+                                .content(feedback.getContent())
+                                .fromUser(UserDto.builder()
+                                        .id(feedback.getToUser().getId())
+                                        .nickName(feedback.getToUser().getUsername())
+                                        .build())
+                                .build())
+                        .collect(Collectors.toList());
+
+        return FeedbackUserAndTeamResponseDto.builder()
+                .category(category(userId, memberId))
+                .userFeedbackList(userFeedbackList)
+                .teamFeedbackList(teamFeedbackList)
+                .build();
+    }
+
     private CssType toType(String type) {
         CssType value = switch (type)
         {
@@ -74,6 +120,14 @@ public class FeedbackService {
             default -> throw new CustomException(ResponseCode.BAD_REQUEST);
         };
         return value;
+    }
+
+    private String category(Long userId, Long memberId) {
+        if (userId == memberId) {
+            return "self";
+        } else {
+            return "others";
+        }
     }
 }
 

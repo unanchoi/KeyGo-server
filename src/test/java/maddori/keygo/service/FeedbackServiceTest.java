@@ -1,6 +1,5 @@
 package maddori.keygo.service;
 
-import maddori.keygo.controller.FeedbackController;
 import maddori.keygo.domain.CssType;
 import maddori.keygo.domain.ReflectionState;
 import maddori.keygo.domain.entity.Feedback;
@@ -14,7 +13,6 @@ import maddori.keygo.repository.FeedbackRepository;
 import maddori.keygo.repository.ReflectionRepository;
 import maddori.keygo.repository.TeamRepository;
 import maddori.keygo.repository.UserRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
