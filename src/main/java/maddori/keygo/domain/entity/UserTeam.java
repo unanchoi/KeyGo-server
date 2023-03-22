@@ -36,11 +36,11 @@ public class UserTeam {
     private Boolean admin;
 
     @Builder
-    public UserTeam(User user, Team team, String nickname, String role) {
+    public UserTeam(User user, Team team, String nickname, String role, String profileImagePath) {
         this.user = user;
         this.team = team;
         this.nickname = nickname;
         this.role = role;
-        this.profileImagePath = "empty";
+        this.profileImagePath = profileImagePath;
     }
 }

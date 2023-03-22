@@ -2,6 +2,7 @@ package maddori.keygo.service;
 
 import lombok.RequiredArgsConstructor;
 import maddori.keygo.common.exception.CustomException;
+import maddori.keygo.common.util.ImageHandler;
 import maddori.keygo.domain.entity.Team;
 import maddori.keygo.domain.entity.User;
 import maddori.keygo.domain.entity.UserTeam;
@@ -13,7 +14,9 @@ import maddori.keygo.repository.UserRepository;
 import maddori.keygo.repository.UserTeamRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,7 +44,7 @@ public class UserService {
     }
 
     @Transactional
-    public UserTeamResponseDto userJoinTeam(Long userId, Long teamId, UserTeamRequestDto requestDto) {
+    public UserTeamResponseDto userJoinTeam(Long userId, Long teamId, MultipartFile profileImage, UserTeamRequestDto requestDto) throws IOException {
         // 유저 정보
         User user = userRepository.findById(userId).orElseThrow(() -> new CustomException(USER_NOT_EXIST));
         // 팀의 존재 여부 체크
@@ -49,13 +52,15 @@ public class UserService {
         // 이미 합류한 팀인지 체크
         if (userTeamRepository.findByUserIdAndTeamId(userId, teamId).isPresent()) throw new CustomException(ALREADY_TEAM_MEMBER);
 
+        String profileImagePath = (profileImage == null) ? null : ImageHandler.imageUpload(profileImage);
+
         // userteam 테이블 업데이트
         UserTeam userTeam = userTeamRepository.save(requestDto.toEntity(user, team));
         UserTeamResponseDto response = UserTeamResponseDto.builder()
                 .id(userTeam.getId())
                 .nickname(userTeam.getNickname())
                 .role(userTeam.getRole())
-                .profileImagePath("empty")
+                .profileImagePath(profileImagePath)
                 .userId(userTeam.getUser().getId())
                 .team(userTeam.getTeam())
                 .build();
