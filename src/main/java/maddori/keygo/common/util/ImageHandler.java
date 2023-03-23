@@ -1,7 +1,6 @@
 package maddori.keygo.common.util;
 
 import maddori.keygo.common.exception.CustomException;
-import maddori.keygo.common.response.ResponseCode;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;

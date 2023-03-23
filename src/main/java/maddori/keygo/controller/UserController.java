@@ -1,9 +1,6 @@
 package maddori.keygo.controller;
 
-import jakarta.servlet.ServletException;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import maddori.keygo.common.exception.CustomException;
 import maddori.keygo.common.response.BasicResponse;
 import maddori.keygo.common.response.FailResponse;
 import maddori.keygo.common.response.SuccessResponse;
@@ -11,9 +8,6 @@ import maddori.keygo.dto.user.UserTeamListResponseDto;
 import maddori.keygo.dto.user.UserTeamRequestDto;
 import maddori.keygo.dto.user.UserTeamResponseDto;
 import maddori.keygo.service.UserService;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -46,13 +40,8 @@ public class UserController {
     public ResponseEntity<? extends BasicResponse> userJoinTeam(@RequestHeader("user_id") Long userId, @PathVariable("teamId") Long teamId,
                                                                 @RequestPart("profile_image") @Nullable MultipartFile profileImage,
                                                                 UserTeamRequestDto userTeamRequestDto) throws IOException {
-//        System.out.println("teamId = " + teamId);
-//        System.out.println("userId = " + userId);
-//        System.out.println("profile_image = " + profileImage);
-//        System.out.println("userTeamRequestDto = " + userTeamRequestDto);
         UserTeamResponseDto userTeamResponseDto = userService.userJoinTeam(userId, teamId, profileImage, userTeamRequestDto);
         return SuccessResponse.toResponseEntity(USER_JOIN_TEAM_SUCCESS, userTeamResponseDto);
-//        return null;
     }
 
 }
