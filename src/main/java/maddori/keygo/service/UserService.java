@@ -6,6 +6,7 @@ import maddori.keygo.common.util.ImageHandler;
 import maddori.keygo.domain.entity.Team;
 import maddori.keygo.domain.entity.User;
 import maddori.keygo.domain.entity.UserTeam;
+import maddori.keygo.dto.team.TeamResponseDto;
 import maddori.keygo.dto.user.UserTeamListResponseDto;
 import maddori.keygo.dto.user.UserTeamRequestDto;
 import maddori.keygo.dto.user.UserTeamResponseDto;
@@ -69,7 +70,11 @@ public class UserService {
                 .role(userTeam.getRole())
                 .profileImagePath(profileImagePath)
                 .userId(userTeam.getUser().getId())
-                .team(userTeam.getTeam())
+                .team(TeamResponseDto.builder()
+                        .id(team.getId())
+                        .teamName(team.getTeamName())
+                        .invitationCode(team.getInvitationCode())
+                        .build())
                 .build();
 
         return response;
