@@ -55,7 +55,14 @@ public class UserService {
         String profileImagePath = (profileImage == null) ? null : ImageHandler.imageUpload(profileImage);
 
         // userteam 테이블 업데이트
-        UserTeam userTeam = userTeamRepository.save(requestDto.toEntity(user, team));
+        UserTeam userTeam = userTeamRepository.save(UserTeam.builder()
+                        .user(user)
+                        .team(team)
+                        .nickname(requestDto.getNickname())
+                        .role(requestDto.getRole())
+                        .profileImagePath(profileImagePath)
+                        .build());
+
         UserTeamResponseDto response = UserTeamResponseDto.builder()
                 .id(userTeam.getId())
                 .nickname(userTeam.getNickname())
