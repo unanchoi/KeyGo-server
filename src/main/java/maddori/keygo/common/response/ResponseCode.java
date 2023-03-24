@@ -44,6 +44,8 @@ public enum ResponseCode {
     REFLECTION_TIME_BEFORE(HttpStatus.BAD_REQUEST, false, "회고 시간이 현 시간 이전"),
     DELETE_REFLECTION_DETAIL_SUCCESS(HttpStatus.OK, true, "회고 디테일 정보 삭제 성공"),
     GET_REFLECTION_LIST_SUCCESS(HttpStatus.OK, true, "회고목록 조회 성공"),
+    GET_REFLECTION_LIST_FAIL(HttpStatus.BAD_REQUEST, false, "회고목록 조회 실패"),
+
     END_REFLECTION_SUCCESS(HttpStatus.OK, true, "회고 종료 성공"),
     GET_CURRENT_REFLECTION_SUCCESS(HttpStatus.OK, true, "현재 회고 정보 가져오기 성공"),
 
@@ -70,6 +72,7 @@ public enum ResponseCode {
     UPDATE_FEEDBACK_SUCCESS(HttpStatus.CREATED, true, "피드백 수정 성공"),
     UPDATE_FEEDBACK_OTHERS_ERROR(HttpStatus.BAD_REQUEST, false, "타 유저가 작성한 피드백에 대한 수정 권한 없음"),
     NOT_INCLUDED_FEEDBACK(HttpStatus.BAD_REQUEST, false, "피드백이 회고에 속하지 않음");
+
 
     // 입력값 형식 관련
 

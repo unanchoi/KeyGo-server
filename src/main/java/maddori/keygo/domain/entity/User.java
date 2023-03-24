@@ -2,6 +2,7 @@ package maddori.keygo.domain.entity;
 
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -21,4 +22,12 @@ public class User {
 
     @Column(nullable = false)
     private String sub;
+
+    @Builder
+    public User(Long id, String username, String email, String sub) {
+        this.id = id;
+        this.username = username;
+        this.email = email;
+        this.sub = sub;
+    }
 }
