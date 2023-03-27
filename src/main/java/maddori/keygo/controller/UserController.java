@@ -28,12 +28,8 @@ public class UserController {
 
     @GetMapping("/teams")
     public ResponseEntity<? extends BasicResponse> getUserTeamList(@RequestHeader("user_id") Long userId) {
-        try {
-            List<UserTeamListResponseDto> userTeamListResponseDtoList = userService.getUserTeamList(userId);
-            return SuccessResponse.toResponseEntity(GET_USER_TEAM_LIST_SUCCESS, userTeamListResponseDtoList);
-        } catch (RuntimeException e) {
-            return FailResponse.toResponseEntity(INTERNAL_SERVER_ERROR);
-        }
+        List<UserTeamListResponseDto> userTeamListResponseDtoList = userService.getUserTeamList(userId);
+        return SuccessResponse.toResponseEntity(GET_USER_TEAM_LIST_SUCCESS, userTeamListResponseDtoList);
     }
     @CrossOrigin
     @PostMapping("/join-team/{teamId}")

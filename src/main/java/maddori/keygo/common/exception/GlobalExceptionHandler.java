@@ -21,6 +21,8 @@ public class GlobalExceptionHandler {
         return FailResponse.toResponseEntity(INTERNAL_SERVER_ERROR);
     }
 
+
+
 }
 
 

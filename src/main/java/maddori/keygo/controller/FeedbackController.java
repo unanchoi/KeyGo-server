@@ -25,11 +25,7 @@ public class FeedbackController {
             @PathVariable("reflectionId") Long reflectionId,
             @PathVariable("feedbackId") Long feedbackId
     ) {
-        try {
-            feedbackService.delete(teamId, reflectionId, feedbackId);
-            return SuccessResponse.toResponseEntity(ResponseCode.DELETE_FEEDBACK_SUCCESS, null);
-        } catch (RuntimeException e) {
-            return FailResponse.toResponseEntity(ResponseCode.DELETE_FEEDBACK_NOT_EXIST);
-        }
+        feedbackService.delete(teamId, reflectionId, feedbackId);
+        return SuccessResponse.toResponseEntity(ResponseCode.DELETE_FEEDBACK_SUCCESS, null);
     }
 }
