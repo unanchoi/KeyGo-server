@@ -79,4 +79,13 @@ public class UserService {
 
         return response;
     }
+
+
+    @Transactional
+    public void userLeaveTeam(Long userId, Long teamId) {
+        // 프로필 이미지 삭제
+        ImageHandler.imageDelete(userTeamRepository.findByUserIdAndTeamId(userId, teamId).get().getProfileImagePath());
+        // userteam에서 데이터 삭제
+        userTeamRepository.deleteByUserIdAndTeamId(userId, teamId);
+    }
 }

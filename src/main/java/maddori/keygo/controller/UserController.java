@@ -3,6 +3,7 @@ package maddori.keygo.controller;
 import lombok.RequiredArgsConstructor;
 import maddori.keygo.common.response.BasicResponse;
 import maddori.keygo.common.response.FailResponse;
+import maddori.keygo.common.response.NoDetailSuccessResponse;
 import maddori.keygo.common.response.SuccessResponse;
 import maddori.keygo.dto.user.UserTeamListResponseDto;
 import maddori.keygo.dto.user.UserTeamRequestDto;
@@ -40,4 +41,10 @@ public class UserController {
         return SuccessResponse.toResponseEntity(USER_JOIN_TEAM_SUCCESS, userTeamResponseDto);
     }
 
+    @DeleteMapping("team/{teamId}/leave")
+    public ResponseEntity<? extends BasicResponse> userLeaveTeam(@RequestHeader("user_id") Long userId,
+                                                                 @PathVariable("teamId") Long teamId) {
+        userService.userLeaveTeam(userId, teamId);
+        return NoDetailSuccessResponse.toResponseEntity(WITHDRAW_TEAM_SUCCESS);
+    }
 }
