@@ -4,12 +4,15 @@ import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import maddori.keygo.common.exception.CustomException;
 import maddori.keygo.common.response.ResponseCode;
+import maddori.keygo.dto.team.CreateTeamRequestDto;
 import maddori.keygo.dto.team.TeamNameResponseDto;
 import maddori.keygo.dto.team.TeamResponseDto;
 import maddori.keygo.domain.entity.Team;
+import maddori.keygo.dto.user.UserTeamResponseDto;
 import maddori.keygo.repository.TeamRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 import static maddori.keygo.common.response.ResponseCode.*;
 
@@ -37,5 +40,15 @@ public class TeamService {
                         .teamName(team.getTeamName())
                         .build();
         return response;
+    }
+
+    public UserTeamResponseDto createTeamAndJoinTeam(Long userId, MultipartFile profileImage, CreateTeamRequestDto createTeamRequestDto) {
+
+        return null;
+    }
+
+    public String generateCode() {
+        String generatedCode = "";
+        return generatedCode;
     }
 }
