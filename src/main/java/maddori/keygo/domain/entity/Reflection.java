@@ -5,9 +5,6 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import maddori.keygo.domain.ReflectionState;
-import org.hibernate.annotations.ColumnDefault;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
@@ -33,6 +30,10 @@ public class Reflection {
     @Enumerated(EnumType.STRING)
     private ReflectionState state;
 
+    public void endReflection() {
+        this.state = ReflectionState.Done;
+    }
+
     @Builder
     public Reflection(Long id, Team team, String reflectionName, LocalDateTime date, ReflectionState state) {
         this.id = id;
@@ -41,4 +42,5 @@ public class Reflection {
         this.date = date;
         this.state = state;
     }
+
 }
