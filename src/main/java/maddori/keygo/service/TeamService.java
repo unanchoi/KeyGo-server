@@ -9,6 +9,7 @@ import maddori.keygo.domain.entity.User;
 import maddori.keygo.domain.entity.UserTeam;
 import maddori.keygo.dto.team.CreateTeamRequestDto;
 import maddori.keygo.dto.team.TeamNameResponseDto;
+import maddori.keygo.dto.team.TeamRequestDto;
 import maddori.keygo.dto.team.TeamResponseDto;
 import maddori.keygo.domain.entity.Team;
 import maddori.keygo.dto.user.UserTeamResponseDto;
@@ -95,6 +96,21 @@ public class TeamService {
                         .teamName(team.getTeamName())
                         .invitationCode(team.getInvitationCode())
                         .build())
+                .build();
+
+        return response;
+    }
+
+    // 팀 이름 업데이트
+    @Transactional
+    public TeamNameResponseDto editTeamName(Long teamId, TeamRequestDto teamRequestDto) {
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new CustomException(TEAM_NOT_EXIST));
+        team.updateTeamName(teamRequestDto.getTeamName());
+        teamRepository.save(team);
+
+        TeamNameResponseDto response = TeamNameResponseDto.
+                builder().id(team.getId())
+                .teamName(team.getTeamName())
                 .build();
 
         return response;

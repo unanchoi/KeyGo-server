@@ -43,4 +43,8 @@ public class Team {
     public void updateRecentReflection(Reflection recentReflection) {
         this.recentReflection = recentReflection;
     }
+
+    public void updateTeamName(String teamName) {
+        this.teamName = teamName;
+    }
 }
