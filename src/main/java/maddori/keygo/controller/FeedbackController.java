@@ -24,28 +24,18 @@ public class FeedbackController {
             @PathVariable("reflectionId") Long reflectionId,
             @PathVariable("feedbackId") Long feedbackId
     ) {
-        try {
-            feedbackService.delete(teamId, reflectionId, feedbackId);
-            return SuccessResponse.toResponseEntity(ResponseCode.DELETE_FEEDBACK_SUCCESS, null);
-        } catch (RuntimeException e) {
-            return FailResponse.toResponseEntity(ResponseCode.DELETE_FEEDBACK_NOT_EXIST);
-        }
+        feedbackService.delete(teamId, reflectionId, feedbackId);
+        return SuccessResponse.toResponseEntity(ResponseCode.DELETE_FEEDBACK_SUCCESS, null);
     }
 
-    @PutMapping("/{teamId}/reflections/{reflectionId}/feedback/{feedbackId}")
+    @PutMapping("/{teamId}/reflections/{reflectionId}/feedbacks/{feedbackId}")
     public ResponseEntity<? extends BasicResponse> updateFeedback(
             @PathVariable("teamId") Long teamId,
             @PathVariable("reflectionId") Long reflectionId,
             @PathVariable("feedbackId") Long feedbackId,
             @RequestBody FeedbackUpdateRequestDto feedbackUpdateRequestDto
     ) {
-        try
-        {
-            FeedbackUpdateResponseDto responseDto = feedbackService.update(teamId, reflectionId, feedbackId, feedbackUpdateRequestDto);
-            return SuccessResponse.toResponseEntity(ResponseCode.UPDATE_FEEDBACK_SUCCESS, responseDto);
-        }
-        catch (RuntimeException e) {
-            return FailResponse.toResponseEntity(ResponseCode.INTERNAL_SERVER_ERROR);
-        }
+        FeedbackUpdateResponseDto responseDto = feedbackService.update(teamId, reflectionId, feedbackId, feedbackUpdateRequestDto);
+        return SuccessResponse.toResponseEntity(ResponseCode.UPDATE_FEEDBACK_SUCCESS, responseDto);
     }
 }
