@@ -59,18 +59,14 @@ public class FeedbackController {
     public ResponseEntity<? extends BasicResponse> getCertainTypeFeedbackAll(
             @RequestParam("type") String type,
             @PathVariable("teamId") Long teamId,
-            @PathVariable("reflection_id") Long reflectionId
+            @PathVariable("reflection_id") Long reflectionId,
+            Long userId
     ) {
-        try {
-
-            List<FeedbackResponseDto> responseDtoList = feedbackService.getFeedbackList(type, teamId, reflectionId);
-            FeedbackListResponseDto responseData = FeedbackListResponseDto.builder()
-                    .feedback(responseDtoList)
-                    .build();
-            return SuccessResponse.toResponseEntity(ResponseCode.GET_FEEDBACK_SUCCESS, responseDtoList);
-        } catch (RuntimeException e) {
-            return FailResponse.toResponseEntity(ResponseCode.INTERNAL_SERVER_ERROR);
-        }
+        List<FeedbackResponseDto> responseDtoList = feedbackService.getFeedbackList(type, teamId, reflectionId, userId);
+        FeedbackListResponseDto responseData = FeedbackListResponseDto.builder()
+                .feedback(responseDtoList)
+                .build();
+        return SuccessResponse.toResponseEntity(ResponseCode.GET_FEEDBACK_SUCCESS, responseData);
     }
 
     @Data
