@@ -5,16 +5,20 @@ import maddori.keygo.common.exception.CustomException;
 import maddori.keygo.common.response.ResponseCode;
 import maddori.keygo.domain.CssType;
 import maddori.keygo.domain.entity.Feedback;
+import maddori.keygo.domain.entity.UserTeam;
 import maddori.keygo.dto.feedback.FeedbackUpdateRequestDto;
 import maddori.keygo.dto.feedback.FeedbackUpdateResponseDto;
 import maddori.keygo.dto.user.UserDto;
 import maddori.keygo.repository.FeedbackRepository;
+import maddori.keygo.repository.UserTeamRepository;
 import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 public class FeedbackService {
     private final FeedbackRepository feedbackRepository;
+
+    private final UserTeamRepository userTeamRepository;
 
     public void delete(Long TeamId, Long reflectionId, Long feedbackId) {
         feedbackRepository.deleteById(feedbackId);
@@ -31,9 +35,12 @@ public class FeedbackService {
         );
         feedbackRepository.save(feedback);
 
+        UserTeam userTeam  =  userTeamRepository.findUserTeamByUserIdAndTeamId(feedback.getToUser().getId(), TeamId)
+                .orElseThrow(() -> new CustomException(ResponseCode.TEAM_NOT_EXIST));
+
         UserDto userDto = UserDto.builder()
                 .id(feedback.getToUser().getId())
-                .nickName(feedback.getToUser().getUsername())
+                .nickname(userTeam.getNickname())
                 .build();
 
         FeedbackUpdateResponseDto feedbackUpdateResponseDto = FeedbackUpdateResponseDto.builder()
