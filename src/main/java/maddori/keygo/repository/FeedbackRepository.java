@@ -14,10 +14,11 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
 
     public List<Feedback> findAllByTypeAndReflectionId(CssType type, Long reflectionId);
 
-    public List<Feedback> findAllByFromUserIdAndReflectionId(Long userId, Long reflectionId);
+    public List<Feedback> findAllByToUserAndFromUserIdAndReflectionId(Long memberId, Long userId, Long reflectionId);
 
-    @Query("select f from Feedback f where f.fromUser .id <> :userId and f.reflection.id = :reflectionId")
-    public List<Feedback> findAllExceptFromUserIdAndReflectionId(
+    @Query("select f from Feedback f where f.fromUser.id = :memberId and f.fromUser .id <> :userId and f.reflection.id = :reflectionId")
+    public List<Feedback> findAllByToUserExceptFromUserIdAndReflectionId(
+            @Param("memberId") Long memberId,
             @Param("userId") Long userId,
             @Param("reflectionId") Long reflectionId);
 }

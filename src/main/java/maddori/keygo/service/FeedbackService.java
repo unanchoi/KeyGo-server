@@ -5,12 +5,14 @@ import maddori.keygo.common.exception.CustomException;
 import maddori.keygo.common.response.ResponseCode;
 import maddori.keygo.domain.CssType;
 import maddori.keygo.domain.entity.Feedback;
+import maddori.keygo.domain.entity.UserTeam;
 import maddori.keygo.dto.feedback.FeedbackResponseDto;
 import maddori.keygo.dto.feedback.FeedbackUpdateRequestDto;
 import maddori.keygo.dto.feedback.FeedbackUpdateResponseDto;
 import maddori.keygo.dto.feedback.FeedbackUserAndTeamResponseDto;
 import maddori.keygo.dto.user.UserDto;
 import maddori.keygo.repository.FeedbackRepository;
+import maddori.keygo.repository.UserTeamRepository;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -20,6 +22,8 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FeedbackService {
     private final FeedbackRepository feedbackRepository;
+
+    private final UserTeamRepository userTeamRepository;
 
     public void delete(Long TeamId, Long reflectionId, Long feedbackId) {
         feedbackRepository.deleteById(feedbackId);
@@ -68,15 +72,14 @@ public class FeedbackService {
     }
 
     // TODO: userID 맞춰서 수정.
-    public FeedbackUserAndTeamResponseDto getUserAndTeamFeedbackList(
-            Long userId,
-            Long teamId,
-            Long reflectionId,
-            Long memberId
-    ) {
+    public FeedbackUserAndTeamResponseDto getUserAndTeamFeedbackList(Long userId, Long teamId, Long reflectionId, Long memberId) {
         // 팀의 회고 중에서, 본인이 쓴 feedback
+
+        UserTeam userTeam = userTeamRepository.findUserTeamsByUserIdAndTeamId(userId, teamId)
+                .orElseThrow(() -> new CustomException(ResponseCode.TEAM_NOT_EXIST));
+
         List<FeedbackResponseDto> userFeedbackList =
-        feedbackRepository.findAllByFromUserIdAndReflectionId(userId, reflectionId)
+        feedbackRepository.findAllByToUserAndFromUserIdAndReflectionId(memberId, userId, reflectionId)
                 .stream().map(feedback -> FeedbackResponseDto.builder()
                         .id(feedback.getId())
                         .type(feedback.getType().getValue())
@@ -92,7 +95,7 @@ public class FeedbackService {
 
         // 팀의 회고 중에서, 본인을 제외한 팀의 피드백
         List<FeedbackResponseDto> teamFeedbackList =
-                feedbackRepository.findAllExceptFromUserIdAndReflectionId(userId, reflectionId)
+                feedbackRepository.findAllByToUserExceptFromUserIdAndReflectionId(memberId, userId, reflectionId)
                         .stream().map(feedback -> FeedbackResponseDto.builder()
                                 .id(feedback.getId())
                                 .type(feedback.getType().getValue())
@@ -100,7 +103,7 @@ public class FeedbackService {
                                 .content(feedback.getContent())
                                 .fromUser(UserDto.builder()
                                         .id(feedback.getToUser().getId())
-                                        .nickName(feedback.getToUser().getUsername())
+                                        .nickName(userTeam.getNickname())
                                         .build())
                                 .build())
                         .collect(Collectors.toList());

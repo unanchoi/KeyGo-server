@@ -74,16 +74,16 @@ public class FeedbackController {
         }
     }
 
-    @GetMapping("/{teamId}/reflections/{reflection_id}/feedbackss")
+    @GetMapping("/{teamId}/reflections/{reflectionId}/feedbacks/from-team")
     public ResponseEntity<? extends BasicResponse> getTeamAndUserFeedback(
             Long userId,
             @RequestParam("members") Long memberId,
             @PathVariable("teamId") Long teamId,
-            @PathVariable("reflection_id") Long reflectionId
+            @PathVariable("reflectionId") Long reflectionId
     ) {
         FeedbackUserAndTeamResponseDto responseDto =
                 feedbackService.getUserAndTeamFeedbackList(userId, teamId, reflectionId, memberId);
-        return SuccessResponse.toResponseEntity(ResponseCode.GET_FEEDBACK_SUCCESS, null);
+        return SuccessResponse.toResponseEntity(ResponseCode.GET_FEEDBACK_SUCCESS, responseDto);
     }
 
     @Data
