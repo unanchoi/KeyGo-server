@@ -22,7 +22,7 @@ public class TeamServiceTest {
     TeamService teamService;
 
     @Test
-    public void getTeamDetailSuccess() throws Exception {
+    public void getCertainTeamDetailSuccess() throws Exception {
     //given
         Team team = Team.builder()
                 .id(1L)
