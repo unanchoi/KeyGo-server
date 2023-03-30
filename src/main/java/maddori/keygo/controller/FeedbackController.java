@@ -5,12 +5,11 @@ import maddori.keygo.common.response.BasicResponse;
 import maddori.keygo.common.response.FailResponse;
 import maddori.keygo.common.response.ResponseCode;
 import maddori.keygo.common.response.SuccessResponse;
+import maddori.keygo.dto.feedback.FeedbackUpdateRequestDto;
+import maddori.keygo.dto.feedback.FeedbackUpdateResponseDto;
 import maddori.keygo.service.FeedbackService;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v2/teams")
@@ -25,11 +24,18 @@ public class FeedbackController {
             @PathVariable("reflectionId") Long reflectionId,
             @PathVariable("feedbackId") Long feedbackId
     ) {
-        try {
-            feedbackService.delete(teamId, reflectionId, feedbackId);
-            return SuccessResponse.toResponseEntity(ResponseCode.DELETE_FEEDBACK_SUCCESS, null);
-        } catch (RuntimeException e) {
-            return FailResponse.toResponseEntity(ResponseCode.DELETE_FEEDBACK_NOT_EXIST);
-        }
+        feedbackService.delete(teamId, reflectionId, feedbackId);
+        return SuccessResponse.toResponseEntity(ResponseCode.DELETE_FEEDBACK_SUCCESS, null);
+    }
+
+    @PutMapping("/{teamId}/reflections/{reflectionId}/feedbacks/{feedbackId}")
+    public ResponseEntity<? extends BasicResponse> updateFeedback(
+            @PathVariable("teamId") Long teamId,
+            @PathVariable("reflectionId") Long reflectionId,
+            @PathVariable("feedbackId") Long feedbackId,
+            @RequestBody FeedbackUpdateRequestDto feedbackUpdateRequestDto
+    ) {
+        FeedbackUpdateResponseDto responseDto = feedbackService.update(teamId, reflectionId, feedbackId, feedbackUpdateRequestDto);
+        return SuccessResponse.toResponseEntity(ResponseCode.UPDATE_FEEDBACK_SUCCESS, responseDto);
     }
 }
