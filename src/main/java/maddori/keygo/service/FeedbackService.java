@@ -39,9 +39,12 @@ public class FeedbackService {
         );
         feedbackRepository.save(feedback);
 
+        UserTeam userTeam  =  userTeamRepository.findUserTeamByUserIdAndTeamId(feedback.getToUser().getId(), TeamId)
+                .orElseThrow(() -> new CustomException(ResponseCode.TEAM_NOT_EXIST));
+
         UserDto userDto = UserDto.builder()
                 .id(feedback.getToUser().getId())
-                .nickname(feedback.getToUser().getUsername())
+                .nickname(userTeam.getNickname())
                 .build();
 
         FeedbackUpdateResponseDto feedbackUpdateResponseDto = FeedbackUpdateResponseDto.builder()

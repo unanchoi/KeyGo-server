@@ -3,6 +3,7 @@ package maddori.keygo.controller;
 import jakarta.persistence.Basic;
 import lombok.RequiredArgsConstructor;
 import maddori.keygo.common.response.BasicResponse;
+import maddori.keygo.common.response.FailResponse;
 import maddori.keygo.common.response.SuccessResponse;
 import maddori.keygo.dto.team.TeamNameResponseDto;
 import maddori.keygo.service.TeamService;
@@ -21,8 +22,13 @@ public class TeamController {
 
     @GetMapping("/{teamId}")
     public ResponseEntity<? extends BasicResponse> getCertainTeamDetail(@PathVariable("teamId") String teamId) {
-        TeamResponseDto teamResponseDto = teamService.getCertainTeam(teamId);
-        return SuccessResponse.toResponseEntity(GET_TEAM_INFO_SUCCESS, teamResponseDto);
+        try {
+
+            TeamResponseDto teamResponseDto = teamService.getCertainTeam(teamId);
+            return SuccessResponse.toResponseEntity(GET_TEAM_INFO_SUCCESS, teamResponseDto);
+        } catch (RuntimeException e) {
+            return FailResponse.toResponseEntity(INTERNAL_SERVER_ERROR);
+        }
     }
 
     @GetMapping("")
