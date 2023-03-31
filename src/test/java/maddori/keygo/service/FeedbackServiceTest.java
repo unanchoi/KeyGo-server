@@ -1,11 +1,13 @@
 package maddori.keygo.service;
 
+import maddori.keygo.controller.FeedbackController;
 import maddori.keygo.domain.CssType;
 import maddori.keygo.domain.ReflectionState;
 import maddori.keygo.domain.entity.Feedback;
 import maddori.keygo.domain.entity.Reflection;
 import maddori.keygo.domain.entity.Team;
 import maddori.keygo.domain.entity.User;
+import maddori.keygo.dto.feedback.FeedbackResponseDto;
 import maddori.keygo.dto.feedback.FeedbackUpdateRequestDto;
 import maddori.keygo.dto.feedback.FeedbackUpdateResponseDto;
 import maddori.keygo.repository.FeedbackRepository;
@@ -18,6 +20,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.*;
 
@@ -77,7 +81,38 @@ public class FeedbackServiceTest {
         assertThat(dto.getContent()).isEqualTo(updatedFeedback.getContent());
 
     }
-
+    
+    @Test
+    public void getFeedbackListSuccess() throws Exception {
+        //given
+        Team team = createTeam();
+        Reflection reflection = createReflection(team);
+        List<Feedback> feedbackList = new ArrayList<>();
+        for (Long i = 1L; i <= 10L; i++) {
+            Feedback feedback = Feedback.builder()
+                    .id(i)
+                    .startContent("start content")
+                    .content("content")
+                    .toUser(createToUser())
+                    .fromUser(createFromUser())
+                    .type(CssType.Continue)
+                    .team(team)
+                    .reflection(reflection)
+                    .keyword("keyword")
+                    .build();
+            feedbackRepository.save(feedback);
+            feedbackList.add(feedback);
+        }
+    //when
+        List<FeedbackResponseDto> dtoList = feedbackService.getFeedbackList(CssType.Continue.getValue(),
+                team.getId(), reflection.getId(), 1L);
+        for (FeedbackResponseDto dto : dtoList) {
+            assertThat(dto.getType()).isEqualTo(CssType.Continue.getValue());
+            assertThat(dto.getContent()).isEqualTo("content");
+            assertThat(dto.getFromUser().getId()).isEqualTo(1L);
+            }
+        assertThat(dtoList.size()).isEqualTo(feedbackList.size());
+    }
 
     private User createToUser() {
         User toUser =  User.builder()

@@ -8,10 +8,11 @@ import java.util.Optional;
 
 
 import java.util.List;
+import java.util.Optional;
 
 public interface UserTeamRepository extends JpaRepository<UserTeam, Long> {
     List<UserTeam> findUserTeamsByUserId(Long userId);
 
-    Optional<UserTeam> findUserTeamByUserIdAndTeamId(Long userId, Long teamId);
+    Optional<UserTeam> findUserTeamsByUserIdAndTeamId(Long userId, Long teamId);
 
 }
