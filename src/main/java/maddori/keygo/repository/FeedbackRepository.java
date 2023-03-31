@@ -16,7 +16,7 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
 
     public List<Feedback> findAllByToUserAndFromUserIdAndReflectionId(Long memberId, Long userId, Long reflectionId);
 
-    @Query("select f from Feedback f where f.fromUser.id = :memberId and f.fromUser .id <> :userId and f.reflection.id = :reflectionId")
+    @Query("select f from Feedback f where f.toUser.id = :memberId and f.fromUser .id <> :userId and f.reflection.id = :reflectionId")
     public List<Feedback> findAllByToUserExceptFromUserIdAndReflectionId(
             @Param("memberId") Long memberId,
             @Param("userId") Long userId,

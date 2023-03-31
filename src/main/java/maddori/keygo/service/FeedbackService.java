@@ -64,8 +64,8 @@ public class FeedbackService {
                         .keyword(feedback.getKeyword())
                         .content(feedback.getContent())
                         .fromUser(UserDto.builder()
-                                .id(feedback.getToUser().getId())
-                                .nickName(feedback.getToUser().getUsername())
+                                .id(feedback.getFromUser().getId())
+                                .nickName(userTeamRepository.findUserTeamsByUserIdAndTeamId(feedback.getFromUser().getId(), teamId).get().getNickname())
                                 .build())
                         .build())
                 .collect(Collectors.toList());
@@ -86,8 +86,8 @@ public class FeedbackService {
                         .keyword(feedback.getKeyword())
                         .content(feedback.getContent())
                         .fromUser(UserDto.builder()
-                                .id(feedback.getToUser().getId())
-                                .nickName(feedback.getToUser().getUsername())
+                                .id(feedback.getFromUser().getId())
+                                .nickName(userTeamRepository.findUserTeamsByUserIdAndTeamId(feedback.getFromUser().getId(), teamId).get().getNickname())
                                 .build())
                         .build())
                 .collect(Collectors.toList());
@@ -102,8 +102,8 @@ public class FeedbackService {
                                 .keyword(feedback.getKeyword())
                                 .content(feedback.getContent())
                                 .fromUser(UserDto.builder()
-                                        .id(feedback.getToUser().getId())
-                                        .nickName(userTeam.getNickname())
+                                        .id(feedback.getFromUser().getId())
+                                        .nickName(userTeamRepository.findUserTeamsByUserIdAndTeamId(feedback.getFromUser().getId(), teamId).get().getNickname())
                                         .build())
                                 .build())
                         .collect(Collectors.toList());
