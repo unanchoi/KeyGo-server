@@ -45,7 +45,12 @@ public class ReflectionController {
             @PathVariable("team_id") Long teamId,
             @PathVariable("reflection_id") Long reflectionId
     ) {
-        ReflectionResponseDto responseDto = reflectionService.endReflection(teamId, reflectionId);
+        ReflectionResponseDto responseData = reflectionService.endReflection(teamId, reflectionId);
+
+        ReflectionListResponseDto responseDto = ReflectionListResponseDto.builder()
+                .reflection(List.of(responseData))
+                .build();
+
         return SuccessResponse.toResponseEntity(ResponseCode.END_REFLECTION_SUCCESS, responseDto);
     }
 
