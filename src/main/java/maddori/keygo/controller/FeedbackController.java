@@ -10,6 +10,7 @@ import maddori.keygo.common.response.SuccessResponse;
 import maddori.keygo.dto.feedback.FeedbackResponseDto;
 import maddori.keygo.dto.feedback.FeedbackUpdateRequestDto;
 import maddori.keygo.dto.feedback.FeedbackUpdateResponseDto;
+import maddori.keygo.dto.feedback.FeedbackUserAndTeamResponseDto;
 import maddori.keygo.dto.reflection.ReflectionResponseDto;
 import maddori.keygo.service.FeedbackService;
 import org.springframework.http.ResponseEntity;
@@ -57,6 +58,18 @@ public class FeedbackController {
                 .feedback(responseDtoList)
                 .build();
         return SuccessResponse.toResponseEntity(ResponseCode.GET_FEEDBACK_SUCCESS, responseData);
+    }
+
+    @GetMapping("/{teamId}/reflections/{reflectionId}/feedbacks/from-team")
+    public ResponseEntity<? extends BasicResponse> getTeamAndUserFeedback(
+            Long userId,
+            @RequestParam("members") Long memberId,
+            @PathVariable("teamId") Long teamId,
+            @PathVariable("reflectionId") Long reflectionId
+    ) {
+        FeedbackUserAndTeamResponseDto responseDto =
+                feedbackService.getUserAndTeamFeedbackList(userId, teamId, reflectionId, memberId);
+        return SuccessResponse.toResponseEntity(ResponseCode.GET_FEEDBACK_SUCCESS, responseDto);
     }
 
     @Data

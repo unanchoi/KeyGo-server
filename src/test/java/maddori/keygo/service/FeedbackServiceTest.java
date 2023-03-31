@@ -1,6 +1,5 @@
 package maddori.keygo.service;
 
-import maddori.keygo.controller.FeedbackController;
 import maddori.keygo.domain.CssType;
 import maddori.keygo.domain.ReflectionState;
 import maddori.keygo.domain.entity.Feedback;
