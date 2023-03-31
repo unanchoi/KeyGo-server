@@ -40,9 +40,12 @@ public class FeedbackService {
         );
         feedbackRepository.save(feedback);
 
+        UserTeam userTeam  =  userTeamRepository.findUserTeamByUserIdAndTeamId(feedback.getToUser().getId(), TeamId)
+                .orElseThrow(() -> new CustomException(ResponseCode.TEAM_NOT_EXIST));
+
         UserDto userDto = UserDto.builder()
                 .id(feedback.getToUser().getId())
-                .nickName(feedback.getToUser().getUsername())
+                .nickname(userTeam.getNickname())
                 .build();
 
         FeedbackUpdateResponseDto feedbackUpdateResponseDto = FeedbackUpdateResponseDto.builder()
@@ -55,12 +58,17 @@ public class FeedbackService {
         return feedbackUpdateResponseDto;
     }
 
-    public List<FeedbackResponseDto> getFeedbackList(String type, Long teamId, Long reflectionId) {
+    public List<FeedbackResponseDto> getFeedbackList(String type, Long teamId, Long reflectionId, Long userId) {
+
+        UserTeam userTeam = userTeamRepository.findUserTeamsByUserIdAndTeamId(userId, teamId)
+                .orElseThrow(() -> new CustomException(ResponseCode.TEAM_NOT_EXIST));
+
         return feedbackRepository.findAllByTypeAndReflectionId(toType(type), reflectionId)
                 .stream()
                 .map(feedback -> FeedbackResponseDto.builder()
                         .id(feedback.getId())
                         .type(feedback.getType().getValue())
+                        .keyword(feedback.getKeyword())
                         .keyword(feedback.getKeyword())
                         .content(feedback.getContent())
                         .fromUser(UserDto.builder()

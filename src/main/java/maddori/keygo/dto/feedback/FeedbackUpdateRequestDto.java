@@ -2,9 +2,11 @@ package maddori.keygo.dto.feedback;
 
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import maddori.keygo.domain.CssType;
 
 @Data
+@NoArgsConstructor
 public class FeedbackUpdateRequestDto {
 
     private String type;
