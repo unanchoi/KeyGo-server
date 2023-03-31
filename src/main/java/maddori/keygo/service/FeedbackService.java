@@ -69,7 +69,7 @@ public class FeedbackService {
                         .content(feedback.getContent())
                         .fromUser(UserDto.builder()
                                 .id(feedback.getFromUser().getId())
-                                .nickname(userTeam.getNickname())
+                                .nickname(userTeamRepository.findUserTeamsByUserIdAndTeamId(feedback.getFromUser().getId(), teamId).get().getNickname())
                                 .build())
                         .build())
                 .collect(Collectors.toList());
