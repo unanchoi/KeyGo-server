@@ -19,7 +19,7 @@ public class AuthController {
     private final AuthService authService;
 
     @DeleteMapping("signOut")
-    public ResponseEntity<? extends BasicResponse> getCertainTeamDetail(@RequestHeader("user_id") Long userId) {
+    public ResponseEntity<? extends BasicResponse> signOut(@RequestHeader("user_id") Long userId) {
         authService.deleteUser(userId);
         return NoDetailSuccessResponse.toResponseEntity(DELETE_USER_SUCCESS);
     }
