@@ -108,12 +108,10 @@ public class TeamService {
         team.updateTeamName(teamRequestDto.getTeamName());
         teamRepository.save(team);
 
-        TeamNameResponseDto response = TeamNameResponseDto.
+        return TeamNameResponseDto.
                 builder().id(team.getId())
                 .teamName(team.getTeamName())
                 .build();
-
-        return response;
     }
 
     // 알파벳 대문자 + 숫자로 이루어진 랜덤 문자열 6자리 생성
