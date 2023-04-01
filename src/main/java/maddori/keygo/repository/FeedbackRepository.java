@@ -3,14 +3,18 @@ package maddori.keygo.repository;
 import maddori.keygo.domain.CssType;
 import maddori.keygo.domain.entity.Feedback;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-
 import java.util.List;
 
 public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
 
     public void deleteById(Long id);
+
+    @Modifying(clearAutomatically = true)
+    @Query("update Feedback f set f.fromUser = null where f.fromUser.id = :userId")
+    void fromUserSetNull(@Param("userId") Long userId);
 
     public List<Feedback> findAllByTypeAndReflectionId(CssType type, Long reflectionId);
 
