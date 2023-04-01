@@ -5,7 +5,6 @@ import maddori.keygo.domain.entity.Reflection;
 import maddori.keygo.domain.entity.Team;
 import maddori.keygo.repository.ReflectionRepository;
 import maddori.keygo.repository.TeamRepository;
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -37,7 +36,6 @@ public class ReflectionTest {
                 .state(ReflectionState.Before)
                 .team(team)
                 .build();
-        team.updateCurrentReflection(reflection1);
         team.updateCurrentReflection(reflection1);
         reflectionRepository.save(reflection1);
     //when

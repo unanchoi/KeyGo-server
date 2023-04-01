@@ -54,4 +54,10 @@ public class Feedback {
         this.content = content;
         this.startContent = startContent;
     }
+
+    public void updateFeedback(CssType type, String keyword, String content) {
+        this.type = type;
+        this.keyword = keyword;
+        this.content = content;
+    }
 }
