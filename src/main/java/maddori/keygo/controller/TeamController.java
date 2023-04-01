@@ -8,6 +8,7 @@ import maddori.keygo.common.response.FailResponse;
 import maddori.keygo.common.response.SuccessResponse;
 import maddori.keygo.dto.team.CreateTeamRequestDto;
 import maddori.keygo.dto.team.TeamNameResponseDto;
+import maddori.keygo.dto.team.TeamRequestDto;
 import maddori.keygo.dto.user.UserTeamRequestDto;
 import maddori.keygo.dto.user.UserTeamResponseDto;
 import maddori.keygo.service.TeamService;
@@ -50,5 +51,12 @@ public class TeamController {
         CreateTeamRequestDto createTeamRequestDto = mapper.convertValue(params, CreateTeamRequestDto.class);
         UserTeamResponseDto userTeamResponseDto = teamService.createTeamAndJoinTeam(userId, profileImage, createTeamRequestDto);
         return SuccessResponse.toResponseEntity(CREATE_JOIN_TEAM_SUCCESS, userTeamResponseDto);
+    }
+
+    @PatchMapping("/{teamId}/team-name")
+    public ResponseEntity<? extends BasicResponse> editTeamName(@PathVariable("teamId") Long teamId,
+                                                                @RequestBody TeamRequestDto teamRequestDto) {
+        TeamNameResponseDto teamNameResponseDto = teamService.editTeamName(teamId, teamRequestDto);
+        return SuccessResponse.toResponseEntity(EDIT_TEAM_NAME_SUCCESS, teamNameResponseDto);
     }
 }

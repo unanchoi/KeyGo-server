@@ -9,6 +9,7 @@ import maddori.keygo.domain.entity.User;
 import maddori.keygo.domain.entity.UserTeam;
 import maddori.keygo.dto.team.CreateTeamRequestDto;
 import maddori.keygo.dto.team.TeamNameResponseDto;
+import maddori.keygo.dto.team.TeamRequestDto;
 import maddori.keygo.dto.team.TeamResponseDto;
 import maddori.keygo.domain.entity.Team;
 import maddori.keygo.dto.user.UserTeamResponseDto;
@@ -98,6 +99,19 @@ public class TeamService {
                 .build();
 
         return response;
+    }
+
+    // 팀 이름 업데이트
+    @Transactional
+    public TeamNameResponseDto editTeamName(Long teamId, TeamRequestDto teamRequestDto) {
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new CustomException(TEAM_NOT_EXIST));
+        team.updateTeamName(teamRequestDto.getTeamName());
+        teamRepository.save(team);
+
+        return TeamNameResponseDto.
+                builder().id(team.getId())
+                .teamName(team.getTeamName())
+                .build();
     }
 
     // 알파벳 대문자 + 숫자로 이루어진 랜덤 문자열 6자리 생성
