@@ -40,7 +40,7 @@ public class FeedbackService {
         );
         feedbackRepository.save(feedback);
 
-        UserTeam userTeam  =  userTeamRepository.findUserTeamByUserIdAndTeamId(feedback.getToUser().getId(), TeamId)
+        UserTeam userTeam  =  userTeamRepository.findUserTeamsByUserIdAndTeamId(feedback.getToUser().getId(), TeamId)
                 .orElseThrow(() -> new CustomException(ResponseCode.TEAM_NOT_EXIST));
 
         UserDto userDto = UserDto.builder()
@@ -73,7 +73,7 @@ public class FeedbackService {
                         .content(feedback.getContent())
                         .fromUser(UserDto.builder()
                                 .id(feedback.getFromUser().getId())
-                                .nickName(userTeamRepository.findUserTeamsByUserIdAndTeamId(feedback.getFromUser().getId(), teamId).get().getNickname())
+                                .nickname(userTeamRepository.findUserTeamsByUserIdAndTeamId(feedback.getFromUser().getId(), teamId).get().getNickname())
                                 .build())
                         .build())
                 .collect(Collectors.toList());
@@ -95,7 +95,7 @@ public class FeedbackService {
                         .content(feedback.getContent())
                         .fromUser(UserDto.builder()
                                 .id(feedback.getFromUser().getId())
-                                .nickName(userTeamRepository.findUserTeamsByUserIdAndTeamId(feedback.getFromUser().getId(), teamId).get().getNickname())
+                                .nickname(userTeamRepository.findUserTeamsByUserIdAndTeamId(feedback.getFromUser().getId(), teamId).get().getNickname())
                                 .build())
                         .build())
                 .collect(Collectors.toList());
@@ -111,7 +111,7 @@ public class FeedbackService {
                                 .content(feedback.getContent())
                                 .fromUser(UserDto.builder()
                                         .id(feedback.getFromUser().getId())
-                                        .nickName(userTeamRepository.findUserTeamsByUserIdAndTeamId(feedback.getFromUser().getId(), teamId).get().getNickname())
+                                        .nickname(userTeamRepository.findUserTeamsByUserIdAndTeamId(feedback.getFromUser().getId(), teamId).get().getNickname())
                                         .build())
                                 .build())
                         .collect(Collectors.toList());
