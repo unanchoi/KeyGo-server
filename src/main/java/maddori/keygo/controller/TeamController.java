@@ -22,13 +22,8 @@ public class TeamController {
 
     @GetMapping("/{teamId}")
     public ResponseEntity<? extends BasicResponse> getCertainTeamDetail(@PathVariable("teamId") String teamId) {
-        try {
-
-            TeamResponseDto teamResponseDto = teamService.getCertainTeam(teamId);
-            return SuccessResponse.toResponseEntity(GET_TEAM_INFO_SUCCESS, teamResponseDto);
-        } catch (RuntimeException e) {
-            return FailResponse.toResponseEntity(INTERNAL_SERVER_ERROR);
-        }
+        TeamResponseDto teamResponseDto = teamService.getCertainTeam(teamId);
+        return SuccessResponse.toResponseEntity(GET_TEAM_INFO_SUCCESS, teamResponseDto);
     }
 
     @GetMapping("")
