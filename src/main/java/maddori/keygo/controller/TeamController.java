@@ -45,7 +45,7 @@ public class TeamController {
     public ResponseEntity<? extends BasicResponse> createTeam(@RequestHeader("user_id") Long userId,
                                                                 @RequestPart("profile_image") @Nullable MultipartFile profileImage,
                                                                 @RequestParam Map<String, String> params) throws IOException {
-
+        // reference: https://tailerbox.tistory.com/30
         ObjectMapper mapper = new ObjectMapper();
         CreateTeamRequestDto createTeamRequestDto = mapper.convertValue(params, CreateTeamRequestDto.class);
         UserTeamResponseDto userTeamResponseDto = teamService.createTeamAndJoinTeam(userId, profileImage, createTeamRequestDto);
