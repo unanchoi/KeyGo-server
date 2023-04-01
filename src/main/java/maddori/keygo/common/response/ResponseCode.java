@@ -71,7 +71,8 @@ public enum ResponseCode {
     DELETE_FEEDBACK_OTHERS_ERROR(HttpStatus.BAD_REQUEST, false, "타 유저가 작성한 피드백에 대한 삭제 권한 없음"),
     UPDATE_FEEDBACK_SUCCESS(HttpStatus.CREATED, true, "피드백 수정 성공"),
     UPDATE_FEEDBACK_OTHERS_ERROR(HttpStatus.BAD_REQUEST, false, "타 유저가 작성한 피드백에 대한 수정 권한 없음"),
-    NOT_INCLUDED_FEEDBACK(HttpStatus.BAD_REQUEST, false, "피드백이 회고에 속하지 않음");
+    NOT_INCLUDED_FEEDBACK(HttpStatus.BAD_REQUEST, false, "피드백이 회고에 속하지 않음"),
+    FEEDBACK_NOT_EXIST(HttpStatus.BAD_REQUEST, false, "피드백이 존재하지 않음");
 
 
     // 입력값 형식 관련

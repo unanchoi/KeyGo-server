@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.persistence.Basic;
 import lombok.RequiredArgsConstructor;
 import maddori.keygo.common.response.BasicResponse;
+import maddori.keygo.common.response.FailResponse;
 import maddori.keygo.common.response.SuccessResponse;
 import maddori.keygo.dto.team.CreateTeamRequestDto;
 import maddori.keygo.dto.team.TeamNameResponseDto;
