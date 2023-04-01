@@ -51,7 +51,7 @@ public class UserService {
         // 팀의 존재 여부 체크
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new CustomException(TEAM_NOT_EXIST));
         // 이미 합류한 팀인지 체크
-        if (userTeamRepository.findByUserIdAndTeamId(userId, teamId).isPresent()) throw new CustomException(ALREADY_TEAM_MEMBER);
+        if (userTeamRepository.findUserTeamsByUserIdAndTeamId(userId, teamId).isPresent()) throw new CustomException(ALREADY_TEAM_MEMBER);
 
         String profileImagePath = (profileImage == null) ? null : ImageHandler.imageUpload(profileImage);
 
