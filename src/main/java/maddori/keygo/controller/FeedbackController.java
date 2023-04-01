@@ -33,6 +33,7 @@ public class FeedbackController {
     ) {
         feedbackService.delete(teamId, reflectionId, feedbackId);
         return SuccessResponse.toResponseEntity(ResponseCode.DELETE_FEEDBACK_SUCCESS, null);
+
     }
 
     @PutMapping("/{teamId}/reflections/{reflectionId}/feedbacks/{feedbackId}")
