@@ -87,7 +87,7 @@ public class FeedbackService {
                 .orElseThrow(() -> new CustomException(ResponseCode.TEAM_NOT_EXIST));
 
         List<FeedbackResponseDto> userFeedbackList =
-        feedbackRepository.findAllByToUserAndFromUserIdAndReflectionId(memberId, userId, reflectionId)
+        feedbackRepository.findAllByToUserIdAndFromUserIdAndReflectionId(memberId, userId, reflectionId)
                 .stream().map(feedback -> FeedbackResponseDto.builder()
                         .id(feedback.getId())
                         .type(feedback.getType().getValue())
