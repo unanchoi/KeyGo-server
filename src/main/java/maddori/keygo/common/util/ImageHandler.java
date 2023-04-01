@@ -11,6 +11,10 @@ import java.util.Date;
 import static maddori.keygo.common.response.ResponseCode.*;
 
 public class ImageHandler {
+
+    // 이미지가 저장되는 서버 경로
+    static String absolutePath = new File("").getAbsolutePath() + "/src/main/resources/static/";
+
     public static String imageUpload(MultipartFile profileImage) throws IOException {
         // 이미지 파일인지 체크
         String contentType = profileImage.getContentType();
@@ -18,7 +22,6 @@ public class ImageHandler {
 
         // Todo: S3 업로드로 변경
         // project root path/src/images/ 에 사진 저장, 디렉토리 없다면 자동 생성
-        String absolutePath = new File("").getAbsolutePath() + "/src/main/resources/static/";
         File directory = new File(absolutePath + "images/");
         if (!directory.exists()) directory.mkdirs();
 
@@ -48,6 +51,12 @@ public class ImageHandler {
         profileImage.transferTo(file);
 
         return path;
+    }
+
+    public static void imageDelete(String path) {
+        System.out.println(absolutePath + path);
+        File file = new File(absolutePath + path);
+        if(!file.delete()) throw new RuntimeException();
     }
 
 }
