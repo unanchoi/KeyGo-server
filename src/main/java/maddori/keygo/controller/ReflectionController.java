@@ -26,18 +26,12 @@ public class ReflectionController {
     public ResponseEntity<? extends BasicResponse> getPastReflectionList(
             @PathVariable("teamId") Long teamId
     ) {
-        try {
-            List<ReflectionResponseDto> reflectionResponseDtoList = reflectionService.getPastReflectionList(teamId);
-            ReflectionListResponseDto responseData = ReflectionListResponseDto.builder()
-                    .reflection(reflectionResponseDtoList)
-                    .build();
+        List<ReflectionResponseDto> reflectionResponseDtoList = reflectionService.getPastReflectionList(teamId);
+        ReflectionListResponseDto responseData = ReflectionListResponseDto.builder()
+                .reflection(reflectionResponseDtoList)
+                .build();
 
-            return SuccessResponse.toResponseEntity(ResponseCode.GET_REFLECTION_LIST_SUCCESS, responseData);
-        }
-        catch (RuntimeException e) {
-            return FailResponse.toResponseEntity(ResponseCode.GET_REFLECTION_LIST_FAIL);
-        }
-
+        return SuccessResponse.toResponseEntity(ResponseCode.GET_REFLECTION_LIST_SUCCESS, responseData);
     }
 
     @PatchMapping("{team_id}/reflections/{reflection_id}/end")

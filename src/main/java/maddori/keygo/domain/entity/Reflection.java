@@ -5,12 +5,19 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import maddori.keygo.domain.ReflectionState;
+import org.hibernate.annotations.ColumnDefault;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
 
 @Entity
 @NoArgsConstructor
 @Getter
+@DynamicInsert
+@DynamicUpdate
 public class Reflection {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

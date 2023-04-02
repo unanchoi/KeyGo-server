@@ -15,6 +15,7 @@ public enum ResponseCode {
     NO_CONTENT(HttpStatus.BAD_REQUEST, false, "데이터가 없습니다."),
     REPEATED_VALUE(HttpStatus.BAD_REQUEST, false, "중복된 데이터입니다."),
     UNAUTHORIZED(HttpStatus.BAD_REQUEST, false, "권한이 없습니다"),
+    USER_NOT_EXIST(HttpStatus.BAD_REQUEST, false, "유저가 존재하지 않음"),
     TEAM_NOT_EXIST(HttpStatus.BAD_REQUEST, false, "팀이 존재하지 않음"),
     USER_NOT_TEAM_MEMBER(HttpStatus.BAD_REQUEST, false, "유저가 요청 대상 팀에 속해있지 않음"),
     REFLECTION_STATUS_ERROR(HttpStatus.BAD_REQUEST, false, "현재 회고의 상태에 요청을 수행할 수 없음"),

@@ -104,7 +104,7 @@ public class FeedbackServiceTest {
         }
     //when
         List<FeedbackResponseDto> dtoList = feedbackService.getFeedbackList(CssType.Continue.getValue(),
-                team.getId(), reflection.getId());
+                team.getId(), reflection.getId(), 1L);
         for (FeedbackResponseDto dto : dtoList) {
             assertThat(dto.getType()).isEqualTo(CssType.Continue.getValue());
             assertThat(dto.getContent()).isEqualTo("content");

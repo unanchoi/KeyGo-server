@@ -6,11 +6,11 @@ import lombok.Data;
 @Data
 public class UserDto {
     private Long id;
-    private String nickName;
+    private String nickname;
 
     @Builder
-    public UserDto(Long id, String nickName) {
+    public UserDto(Long id, String nickname) {
         this.id = id;
-        this.nickName = nickName;
+        this.nickname = nickname;
     }
 }
