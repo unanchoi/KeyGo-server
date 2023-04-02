@@ -34,6 +34,20 @@ public class ReflectionController {
         return SuccessResponse.toResponseEntity(ResponseCode.GET_REFLECTION_LIST_SUCCESS, responseData);
     }
 
+    @PatchMapping("{team_id}/reflections/{reflection_id}/end")
+    public ResponseEntity<? extends BasicResponse> endInProgressReflection(
+            @PathVariable("team_id") Long teamId,
+            @PathVariable("reflection_id") Long reflectionId
+    ) {
+        ReflectionResponseDto responseData = reflectionService.endReflection(teamId, reflectionId);
+
+        ReflectionListResponseDto responseDto = ReflectionListResponseDto.builder()
+                .reflection(List.of(responseData))
+                .build();
+
+        return SuccessResponse.toResponseEntity(ResponseCode.END_REFLECTION_SUCCESS, responseDto);
+    }
+
     @Data
     @Builder
     public static class ReflectionListResponseDto {

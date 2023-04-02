@@ -48,6 +48,7 @@ public enum ResponseCode {
 
     END_REFLECTION_SUCCESS(HttpStatus.OK, true, "회고 종료 성공"),
     GET_CURRENT_REFLECTION_SUCCESS(HttpStatus.OK, true, "현재 회고 정보 가져오기 성공"),
+    GET_REFLECTION_FAIL(HttpStatus.BAD_REQUEST, false, "회고 정보 가져오기 실패"),
 
     // team
     GET_TEAM_NAME_SUCCESS(HttpStatus.OK, true, "팀 이름 가져오기 성공"),
