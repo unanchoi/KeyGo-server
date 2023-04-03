@@ -6,9 +6,7 @@ import maddori.keygo.domain.entity.Feedback;
 import maddori.keygo.domain.entity.Reflection;
 import maddori.keygo.domain.entity.Team;
 import maddori.keygo.domain.entity.User;
-import maddori.keygo.dto.feedback.FeedbackResponseDto;
-import maddori.keygo.dto.feedback.FeedbackUpdateRequestDto;
-import maddori.keygo.dto.feedback.FeedbackUpdateResponseDto;
+import maddori.keygo.dto.feedback.*;
 import maddori.keygo.repository.FeedbackRepository;
 import maddori.keygo.repository.ReflectionRepository;
 import maddori.keygo.repository.TeamRepository;
@@ -79,6 +77,23 @@ public class FeedbackServiceTest {
         assertThat(dto.getKeyword()).isEqualTo(updatedFeedback.getKeyword());
         assertThat(dto.getContent()).isEqualTo(updatedFeedback.getContent());
 
+    }
+    
+    @Test
+    public void createFeedbackSuccess() throws Exception {
+
+        FeedbackCreateRequestDto dto = FeedbackCreateRequestDto.builder()
+                .type(CssType.Continue.getValue())
+                .keyword("keyword")
+                .content("content")
+                .toId(1L)
+                .build();
+
+        FeedbackCreateResponseDto responseDto = feedbackService.createFeedback(dto, 1L, 1L, 2L);
+        assertThat(responseDto).isNotNull();
+        assertThat(responseDto.getType()).isEqualTo(CssType.Continue.getValue());
+        assertThat(responseDto.getKeyword()).isEqualTo("keyword");
+        assertThat(responseDto.getContent()).isEqualTo("content");
     }
     
     @Test
