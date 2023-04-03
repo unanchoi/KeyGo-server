@@ -9,6 +9,7 @@ import maddori.keygo.common.response.FailResponse;
 import maddori.keygo.common.response.ResponseCode;
 import maddori.keygo.common.response.SuccessResponse;
 import maddori.keygo.dto.reflection.ReflectionResponseDto;
+import maddori.keygo.repository.ReflectionRepository;
 import maddori.keygo.service.ReflectionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,6 +47,16 @@ public class ReflectionController {
                 .build();
 
         return SuccessResponse.toResponseEntity(ResponseCode.END_REFLECTION_SUCCESS, responseDto);
+    }
+
+    @DeleteMapping("{team_id}/reflections/{reflection_id}")
+    public ResponseEntity<? extends BasicResponse> deleteReflectionDetail(
+            @PathVariable("team_id") Long teamId,
+            @PathVariable("reflection_id") Long reflectionId
+    ) {
+        ReflectionResponseDto responseDto = reflectionService.deleteReflectionDetail(teamId, reflectionId);
+
+        return SuccessResponse.toResponseEntity(ResponseCode.DELETE_REFLECTION_DETAIL_SUCCESS, responseDto);
     }
 
     @Data
