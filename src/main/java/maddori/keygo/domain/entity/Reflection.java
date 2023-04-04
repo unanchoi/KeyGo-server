@@ -41,6 +41,15 @@ public class Reflection {
         this.state = ReflectionState.Done;
     }
 
+
+    public void updateReflectionName(String reflectionName) {
+        this.reflectionName = reflectionName;
+    }
+
+    public void updateReflectionDate(LocalDateTime date) {
+        this.date = date;
+    }
+
     @Builder
     public Reflection(Long id, Team team, String reflectionName, LocalDateTime date, ReflectionState state) {
         this.id = id;
@@ -49,5 +58,4 @@ public class Reflection {
         this.date = date;
         this.state = state;
     }
-
 }

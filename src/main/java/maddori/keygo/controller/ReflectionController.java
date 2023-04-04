@@ -9,6 +9,8 @@ import maddori.keygo.common.response.FailResponse;
 import maddori.keygo.common.response.ResponseCode;
 import maddori.keygo.common.response.SuccessResponse;
 import maddori.keygo.dto.reflection.ReflectionResponseDto;
+import maddori.keygo.dto.reflection.ReflectionUpdateRequestDto;
+import maddori.keygo.dto.reflection.ReflectionUpdateResponseDto;
 import maddori.keygo.service.ReflectionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -47,6 +49,17 @@ public class ReflectionController {
 
         return SuccessResponse.toResponseEntity(ResponseCode.END_REFLECTION_SUCCESS, responseDto);
     }
+
+    @PatchMapping("{team_id}/reflections/{reflection_id}")
+    public ResponseEntity<? extends BasicResponse> updateReflectionDetail(
+            @PathVariable("team_id") Long teamId,
+            @PathVariable("reflection_id") Long reflectionId,
+            @RequestBody ReflectionUpdateRequestDto reflectionUpdateRequestDto
+    ) {
+        ReflectionUpdateResponseDto responseDto = reflectionService.updateReflectionDetail(teamId, reflectionId, reflectionUpdateRequestDto);
+        return SuccessResponse.toResponseEntity(ResponseCode.UPDATE_REFLECTION_DETAIL_SUCCESS, null);
+    }
+
 
     @Data
     @Builder
