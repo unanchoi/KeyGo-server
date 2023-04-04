@@ -2,6 +2,8 @@ package maddori.keygo.service;
 
 import lombok.RequiredArgsConstructor;
 import maddori.keygo.common.exception.CustomException;
+import maddori.keygo.dto.auth.LoginRequestDto;
+import maddori.keygo.dto.auth.LoginResponseDto;
 import maddori.keygo.repository.FeedbackRepository;
 import maddori.keygo.repository.UserRepository;
 import org.springframework.stereotype.Service;
@@ -20,5 +22,11 @@ public class AuthService {
         userRepository.delete(userRepository.findById(userId).orElseThrow(() ->
                                                     new CustomException(USER_NOT_EXIST)));
         feedbackRepository.fromUserSetNull(userId);
+    }
+
+    @Transactional
+    public LoginResponseDto appleLogin(LoginRequestDto loginRequestDto) {
+
+        return null;
     }
 }
