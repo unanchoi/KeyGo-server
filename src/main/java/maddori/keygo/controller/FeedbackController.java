@@ -7,10 +7,7 @@ import maddori.keygo.common.response.BasicResponse;
 import maddori.keygo.common.response.FailResponse;
 import maddori.keygo.common.response.ResponseCode;
 import maddori.keygo.common.response.SuccessResponse;
-import maddori.keygo.dto.feedback.FeedbackResponseDto;
-import maddori.keygo.dto.feedback.FeedbackUpdateRequestDto;
-import maddori.keygo.dto.feedback.FeedbackUpdateResponseDto;
-import maddori.keygo.dto.feedback.FeedbackUserAndTeamResponseDto;
+import maddori.keygo.dto.feedback.*;
 import maddori.keygo.dto.reflection.ReflectionResponseDto;
 import maddori.keygo.service.FeedbackService;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +21,17 @@ import java.util.List;
 public class FeedbackController {
 
     private final FeedbackService feedbackService;
+
+    @PostMapping( "{team_id}/reflections/{reflection_id}/feedbacks")
+    public ResponseEntity<? extends BasicResponse> createFeedback(
+            @PathVariable("teamId") Long teamId,
+            @PathVariable("reflectionId") Long reflectionId,
+            @RequestBody FeedbackCreateRequestDto feedbackCreateRequestDto,
+            Long userId
+    ) {
+        FeedbackCreateResponseDto responseDto = feedbackService.createFeedback(feedbackCreateRequestDto, teamId, reflectionId, userId);
+        return SuccessResponse.toResponseEntity(ResponseCode.CREATE_FEEDBACK_SUCCESS, responseDto);
+    }
 
     @DeleteMapping("/{teamId}/reflections/{reflectionId}/feedbacks/{feedbackId}")
     public ResponseEntity<? extends BasicResponse> deleteFeedback(
