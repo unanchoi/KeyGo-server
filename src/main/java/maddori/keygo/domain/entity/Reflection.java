@@ -41,6 +41,15 @@ public class Reflection {
         this.state = ReflectionState.Done;
     }
 
+
+    public void updateReflectionName(String reflectionName) {
+        this.reflectionName = reflectionName;
+    }
+
+    public void updateReflectionDate(LocalDateTime date) {
+        this.date = date;
+        }
+        
     public void deleteInfo() {
         this.reflectionName = null;
         this.date = null;
@@ -55,5 +64,4 @@ public class Reflection {
         this.date = date;
         this.state = state;
     }
-
 }
