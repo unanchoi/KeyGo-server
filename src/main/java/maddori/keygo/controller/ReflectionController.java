@@ -60,6 +60,15 @@ public class ReflectionController {
         return SuccessResponse.toResponseEntity(ResponseCode.UPDATE_REFLECTION_DETAIL_SUCCESS, responseDto);
     }
 
+    @DeleteMapping("{team_id}/reflections/{reflection_id}")
+    public ResponseEntity<? extends BasicResponse> deleteReflectionDetail(
+            @PathVariable("team_id") Long teamId,
+            @PathVariable("reflection_id") Long reflectionId
+    ) {
+        ReflectionResponseDto responseDto = reflectionService.deleteReflectionDetail(teamId, reflectionId);
+
+        return SuccessResponse.toResponseEntity(ResponseCode.DELETE_REFLECTION_DETAIL_SUCCESS, responseDto);
+    }
 
     @Data
     @Builder

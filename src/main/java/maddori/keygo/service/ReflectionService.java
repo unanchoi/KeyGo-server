@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.sql.Ref;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -41,6 +42,8 @@ public class ReflectionService {
 
         return result;
     }
+
+    @Transactional
     public ReflectionResponseDto endReflection(Long teamId, Long reflectionId) {
         Reflection reflection = reflectionRepository.findById(reflectionId)
                 .orElseThrow(
@@ -66,6 +69,7 @@ public class ReflectionService {
                 .build();
     }
 
+
     public ReflectionUpdateResponseDto updateReflectionDetail(Long teamId, Long reflectionId, ReflectionUpdateRequestDto requestDto) {
         Reflection reflection =  reflectionRepository.findById(reflectionId)
                 .orElseThrow(() -> new CustomException(ResponseCode.GET_REFLECTION_FAIL));
@@ -81,4 +85,23 @@ public class ReflectionService {
                 .teamId(reflection.getTeam().getId())
                 .build();
     }
+
+    @Transactional
+    public ReflectionResponseDto deleteReflectionDetail(Long reflectionId, Long teamId) {
+
+        Reflection reflection = reflectionRepository.findById(reflectionId)
+                .orElseThrow(
+                        () -> new CustomException(ResponseCode.GET_REFLECTION_FAIL));
+
+        reflection.deleteInfo();
+        reflectionRepository.save(reflection);
+        return ReflectionResponseDto.builder()
+                .id(reflection.getId())
+                .reflectionName(reflection.getReflectionName())
+                .date(reflection.getDate())
+                .state(reflection.getState())
+                .teamId(teamId)
+                .build();
+    }
+
 }
