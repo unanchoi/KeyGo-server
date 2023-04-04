@@ -47,8 +47,6 @@ public class ReflectionTest {
         assertThat(reflection1.getTeam().getId()).isEqualTo(reflection2.getTeam().getId());
         assertThat(reflection1.getState()).isEqualTo(reflection2.getState());
         assertThat(reflection1.getDate()).isEqualTo(reflection2.getDate());
-
-
     }
 
     private LocalDateTime isNow() {

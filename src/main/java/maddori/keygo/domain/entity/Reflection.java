@@ -41,6 +41,12 @@ public class Reflection {
         this.state = ReflectionState.Done;
     }
 
+    public void deleteInfo() {
+        this.reflectionName = null;
+        this.date = null;
+        this.state = ReflectionState.SettingRequired;
+    }
+
     @Builder
     public Reflection(Long id, Team team, String reflectionName, LocalDateTime date, ReflectionState state) {
         this.id = id;
