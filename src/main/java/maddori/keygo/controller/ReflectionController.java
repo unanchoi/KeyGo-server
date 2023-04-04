@@ -57,7 +57,7 @@ public class ReflectionController {
             @RequestBody ReflectionUpdateRequestDto reflectionUpdateRequestDto
     ) {
         ReflectionUpdateResponseDto responseDto = reflectionService.updateReflectionDetail(teamId, reflectionId, reflectionUpdateRequestDto);
-        return SuccessResponse.toResponseEntity(ResponseCode.UPDATE_REFLECTION_DETAIL_SUCCESS, null);
+        return SuccessResponse.toResponseEntity(ResponseCode.UPDATE_REFLECTION_DETAIL_SUCCESS, responseDto);
     }
 
 
