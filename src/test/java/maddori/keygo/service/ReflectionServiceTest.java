@@ -1,6 +1,8 @@
 package maddori.keygo.service;
 
+import maddori.keygo.domain.ReflectionState;
 import maddori.keygo.domain.entity.Reflection;
+import maddori.keygo.dto.reflection.ReflectionCurrentResponseDto;
 import maddori.keygo.dto.reflection.ReflectionUpdateRequestDto;
 import maddori.keygo.dto.reflection.ReflectionUpdateResponseDto;
 import maddori.keygo.repository.ReflectionRepository;
@@ -43,6 +45,20 @@ public class ReflectionServiceTest {
         assertThat(responseDto.getId()).isEqualTo(reflection.getId());
         assertThat(responseDto.getTeamId()).isEqualTo(reflection.getTeam().getId());
         assertThat(responseDto.getReflectionState()).isEqualTo(reflection.getState().toString());
+    }
+    
+    @Test
+    public void getCurrentReflectionDetailSuccess() throws Exception {
+    //given
+        Reflection reflection = reflectionRepository.findById(1L).get();
+    //when
+        reflection.updateReflectionState(ReflectionState.Progressing);
+        ReflectionCurrentResponseDto dto =  reflectionService.getCurrentReflectionDetail(1L);
 
+    //then
+        assertThat(dto.getReflectionName()).isEqualTo(reflection.getReflectionName());
+        assertThat(dto.getReflectionDate()).isEqualTo(reflection.getDate().toString());
+        assertThat(dto.getId()).isEqualTo(reflection.getId());
+        assertThat(dto.getReflectionStatus()).isEqualTo(ReflectionState.Progressing.toString());
     }
 }
