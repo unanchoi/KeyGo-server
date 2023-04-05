@@ -60,6 +60,13 @@ public class ReflectionController {
         return SuccessResponse.toResponseEntity(ResponseCode.UPDATE_REFLECTION_DETAIL_SUCCESS, responseDto);
     }
 
+    @GetMapping("{team_id}/reflections/current")
+    public ResponseEntity<? extends  BasicResponse> getCurrentReflectionDetail(
+        @PathVariable("team_id") Long teamId){
+        
+        return SuccessResponse.toResponseEntity(ResponseCode.GET_CURRENT_REFLECTION_SUCCESS, null);
+    }
+
 
     @Data
     @Builder
