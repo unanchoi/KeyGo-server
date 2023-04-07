@@ -91,7 +91,7 @@ public class TeamServiceTest {
                 .role("role2")
                 .build();
 
-        assertThat(teamMemberListResponseDto.getMembers().stream().collect(Collectors.toList()))
+        assertThat(teamMemberListResponseDto.getMembers())
                 .containsOnly(userTeamResponseDto1, userTeamResponseDto2);
     }
 }
