@@ -21,6 +21,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static maddori.keygo.common.response.ResponseCode.*;
 
@@ -116,14 +117,19 @@ public class TeamService {
     @Transactional(readOnly = true)
     public TeamMemberListResponseDto getTeamMembers(Long teamId) {
 
-        List<UserTeam> userTeamList = userTeamRepository.findUserTeamsByTeamId(teamId);
+        List<UserTeamResponseDto> userTeamList = userTeamRepository.findUserTeamsByTeamId(teamId)
+                .stream()
+                .map(userTeam -> UserTeamResponseDto.builder()
+                        .id(userTeam.getUser().getId())
+                        .nickname(userTeam.getNickname())
+                        .role(userTeam.getRole())
+                        .profileImagePath(userTeam.getProfileImagePath())
+                        .build())
+                .collect(Collectors.toList());
 
-//        List<UserTeamResponseDto> userTeamResponseList = userTeamList.
-
-//        TeamMemberListResponseDto response = TeamMemberListResponseDto.builder()
-//                .
-
-        return null;
+        return TeamMemberListResponseDto.builder()
+                .members(userTeamList)
+                .build();
     }
 
     // 알파벳 대문자 + 숫자로 이루어진 랜덤 문자열 6자리 생성

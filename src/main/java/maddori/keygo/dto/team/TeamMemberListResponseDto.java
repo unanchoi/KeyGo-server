@@ -9,10 +9,10 @@ import java.util.List;
 @Data
 public class TeamMemberListResponseDto {
 
-    List<UserTeamResponseDto> members;
+    private List<UserTeamResponseDto> members;
 
     @Builder
-    public TeamMemberListResponseDto(List<UserTeamResponseDto> userTeamResponseDtoList) {
-        this.members = userTeamResponseDtoList;
+    public TeamMemberListResponseDto(List<UserTeamResponseDto> members) {
+        this.members = members;
     }
 }
