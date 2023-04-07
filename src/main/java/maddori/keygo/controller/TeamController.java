@@ -5,13 +5,10 @@ import jakarta.persistence.Basic;
 import lombok.RequiredArgsConstructor;
 import maddori.keygo.common.response.BasicResponse;
 import maddori.keygo.common.response.SuccessResponse;
-import maddori.keygo.dto.team.CreateTeamRequestDto;
-import maddori.keygo.dto.team.TeamNameResponseDto;
-import maddori.keygo.dto.team.TeamRequestDto;
+import maddori.keygo.dto.team.*;
 import maddori.keygo.dto.user.UserTeamRequestDto;
 import maddori.keygo.dto.user.UserTeamResponseDto;
 import maddori.keygo.service.TeamService;
-import maddori.keygo.dto.team.TeamResponseDto;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
 import org.springframework.web.bind.annotation.*;
@@ -57,5 +54,11 @@ public class TeamController {
                                                                 @RequestBody TeamRequestDto teamRequestDto) {
         TeamNameResponseDto teamNameResponseDto = teamService.editTeamName(teamId, teamRequestDto);
         return SuccessResponse.toResponseEntity(EDIT_TEAM_NAME_SUCCESS, teamNameResponseDto);
+    }
+
+    @GetMapping("/{teamId}/members")
+    public ResponseEntity<? extends BasicResponse> getTeamMembers(@PathVariable("teamId") Long teamId) {
+        TeamMemberListResponseDto response = teamService.getTeamMembers(teamId);
+        return SuccessResponse.toResponseEntity(GET_USER_TEAM_LIST_SUCCESS, response);
     }
 }

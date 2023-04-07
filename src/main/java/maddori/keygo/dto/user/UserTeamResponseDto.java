@@ -27,4 +27,12 @@ public class UserTeamResponseDto {
         this.userId = userId;
         this.team = team;
     }
+
+    @Builder
+    public UserTeamResponseDto(Long id, String nickname, String role, String profileImagePath) {
+        this.id = id;
+        this.nickname = nickname;
+        this.role = role;
+        this.profileImagePath = profileImagePath;
+    }
 }

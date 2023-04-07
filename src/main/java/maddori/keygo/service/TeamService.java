@@ -7,10 +7,7 @@ import maddori.keygo.domain.ReflectionState;
 import maddori.keygo.domain.entity.Reflection;
 import maddori.keygo.domain.entity.User;
 import maddori.keygo.domain.entity.UserTeam;
-import maddori.keygo.dto.team.CreateTeamRequestDto;
-import maddori.keygo.dto.team.TeamNameResponseDto;
-import maddori.keygo.dto.team.TeamRequestDto;
-import maddori.keygo.dto.team.TeamResponseDto;
+import maddori.keygo.dto.team.*;
 import maddori.keygo.domain.entity.Team;
 import maddori.keygo.dto.user.UserTeamResponseDto;
 import maddori.keygo.repository.ReflectionRepository;
@@ -22,6 +19,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
 
 import static maddori.keygo.common.response.ResponseCode.*;
@@ -114,6 +112,20 @@ public class TeamService {
                 .build();
 
         return response;
+    }
+
+    // 팀 멤버 리스트 가져오기
+    @Transactional(readOnly = true)
+    public TeamMemberListResponseDto getTeamMembers(Long teamId) {
+
+        List<UserTeam> userTeamList = userTeamRepository.findUserTeamsByTeamId(teamId);
+
+//        List<UserTeamResponseDto> userTeamResponseList = userTeamList.
+
+//        TeamMemberListResponseDto response = TeamMemberListResponseDto.builder()
+//                .
+
+        return null;
     }
 
     // 알파벳 대문자 + 숫자로 이루어진 랜덤 문자열 6자리 생성
