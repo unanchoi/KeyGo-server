@@ -14,12 +14,12 @@ import static maddori.keygo.common.response.ResponseCode.GET_TEAM_INFO_SUCCESS;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/v2/")
+@RequestMapping("api/v2/auth/")
 public class AuthController {
     private final AuthService authService;
 
-    @DeleteMapping("login/signOut")
-    public ResponseEntity<? extends BasicResponse> getCertainTeamDetail(@RequestHeader("user_id") Long userId) {
+    @DeleteMapping("signOut")
+    public ResponseEntity<? extends BasicResponse> signOut(@RequestHeader("user_id") Long userId) {
         authService.deleteUser(userId);
         return NoDetailSuccessResponse.toResponseEntity(DELETE_USER_SUCCESS);
     }

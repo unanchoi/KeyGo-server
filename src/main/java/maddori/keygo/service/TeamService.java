@@ -106,12 +106,10 @@ public class TeamService {
         team.updateTeamName(teamRequestDto.getTeamName());
         teamRepository.save(team);
 
-        TeamNameResponseDto response = TeamNameResponseDto.
+        return TeamNameResponseDto.
                 builder().id(team.getId())
                 .teamName(team.getTeamName())
                 .build();
-
-        return response;
     }
 
     // 팀 멤버 리스트 가져오기
