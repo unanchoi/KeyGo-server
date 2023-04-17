@@ -63,7 +63,7 @@ public class ReflectionController {
     @GetMapping("{team_id}/reflections/current")
     public ResponseEntity<? extends  BasicResponse> getCurrentReflectionDetail(
         @PathVariable("team_id") Long teamId){
-        
+        reflectionService.getCurrentReflectionDetail(teamId);
         return SuccessResponse.toResponseEntity(ResponseCode.GET_CURRENT_REFLECTION_SUCCESS, null);
     }
 
