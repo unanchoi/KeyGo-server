@@ -52,13 +52,13 @@ public class ReflectionServiceTest {
     //given
         Reflection reflection = reflectionRepository.findById(1L).get();
     //when
-        reflection.updateReflectionState(ReflectionState.Progressing);
+        reflection.updateReflectionState(ReflectionState.Done);
         ReflectionCurrentResponseDto dto =  reflectionService.getCurrentReflectionDetail(1L);
 
     //then
         assertThat(dto.getReflectionName()).isEqualTo(reflection.getReflectionName());
         assertThat(dto.getReflectionDate()).isEqualTo(reflection.getDate().toString());
         assertThat(dto.getId()).isEqualTo(reflection.getId());
-        assertThat(dto.getReflectionStatus()).isEqualTo(ReflectionState.Progressing.toString());
+        assertThat(dto.getReflectionStatus()).isEqualTo(ReflectionState.Done.toString());
     }
 }

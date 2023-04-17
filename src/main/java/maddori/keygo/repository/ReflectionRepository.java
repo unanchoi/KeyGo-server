@@ -14,4 +14,5 @@ public interface ReflectionRepository extends JpaRepository<Reflection, Long> {
     public Optional<Reflection> findById(Long reflectionId);
 
     public Optional<Reflection> findByTeamIdAndState(Long teamId, ReflectionState state);
+
 }

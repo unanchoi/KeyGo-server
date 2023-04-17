@@ -13,6 +13,7 @@ import maddori.keygo.dto.reflection.ReflectionUpdateRequestDto;
 import maddori.keygo.dto.reflection.ReflectionUpdateResponseDto;
 import maddori.keygo.repository.FeedbackRepository;
 import maddori.keygo.repository.ReflectionRepository;
+import maddori.keygo.repository.TeamRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,8 @@ public class ReflectionService {
     private final ReflectionRepository reflectionRepository;
 
     private final FeedbackRepository feedbackRepository;
+
+    private final TeamRepository teamRepository;
 
     @Transactional(readOnly = true)
     public List<ReflectionResponseDto> getPastReflectionList(Long teamId) {
@@ -54,7 +57,7 @@ public class ReflectionService {
                 .orElseThrow(
                 () -> new CustomException(ResponseCode.GET_REFLECTION_FAIL));
 
-        reflection.updateReflectionState(ReflectionState.Progressing);
+        reflection.updateReflectionState(ReflectionState.Done);
 
         Reflection nextReflection = Reflection.builder()
                 .team(reflection.getTeam())
@@ -93,7 +96,10 @@ public class ReflectionService {
 
     @Transactional
     public ReflectionCurrentResponseDto getCurrentReflectionDetail(Long teamId) {
-    Reflection reflection = reflectionRepository.findByTeamIdAndState(teamId, ReflectionState.Progressing)
+        Team team = teamRepository.findById(teamId).get();
+        Long currentReflectionId = team.getCurrentReflection().getId();
+
+    Reflection reflection = reflectionRepository.findById(currentReflectionId)
             .orElseThrow(() -> new CustomException(ResponseCode.GET_REFLECTION_FAIL));
 
     List<String> keywordList = new ArrayList<>();
