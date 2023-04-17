@@ -13,7 +13,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
-
 import static org.assertj.core.api.Assertions.*;
 
 @SpringBootTest
@@ -45,6 +44,7 @@ public class ReflectionServiceTest {
         assertThat(responseDto.getId()).isEqualTo(reflection.getId());
         assertThat(responseDto.getTeamId()).isEqualTo(reflection.getTeam().getId());
         assertThat(responseDto.getReflectionState()).isEqualTo(reflection.getState().toString());
+
     }
     
     @Test
@@ -61,4 +61,20 @@ public class ReflectionServiceTest {
         assertThat(dto.getId()).isEqualTo(reflection.getId());
         assertThat(dto.getReflectionStatus()).isEqualTo(ReflectionState.Done.toString());
     }
+
+ }
+ 
+   @Test
+    public void deleteReflectionDetailSuccess() throws Exception {
+    //given
+        reflectionService.deleteReflectionDetail(1L, 1L);
+    //when
+        Reflection reflection =  reflectionRepository.findById(1L).get();
+    
+    //then
+        assertThat(reflection.getId()).isEqualTo(1L);
+        assertThat(reflection.getTeam().getId()).isEqualTo(1L);
+        assertThat(reflection.getReflectionName()).isNull();
+        assertThat(reflection.getDate()).isNull();
+        }
 }

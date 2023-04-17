@@ -21,6 +21,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Date;
+import java.sql.Ref;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -115,6 +116,23 @@ public class ReflectionService {
                 .reflectionDate(reflection.getDate().toString())
                 .reflectionStatus(reflection.getState().toString())
                 .reflectionKeywords(keywordList)
+                .build();
+    }
+
+    public ReflectionResponseDto deleteReflectionDetail(Long reflectionId, Long teamId) {
+
+        Reflection reflection = reflectionRepository.findById(reflectionId)
+                .orElseThrow(
+                        () -> new CustomException(ResponseCode.GET_REFLECTION_FAIL));
+
+        reflection.deleteInfo();
+        reflectionRepository.save(reflection);
+        return ReflectionResponseDto.builder()
+                .id(reflection.getId())
+                .reflectionName(reflection.getReflectionName())
+                .date(reflection.getDate())
+                .state(reflection.getState())
+                .teamId(teamId)
                 .build();
     }
 }

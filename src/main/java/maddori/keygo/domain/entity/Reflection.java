@@ -48,6 +48,12 @@ public class Reflection {
 
     public void updateReflectionDate(LocalDateTime date) {
         this.date = date;
+        }
+        
+    public void deleteInfo() {
+        this.reflectionName = null;
+        this.date = null;
+        this.state = ReflectionState.SettingRequired;
     }
 
 
