@@ -4,6 +4,7 @@ import maddori.keygo.common.response.BasicResponse;
 import maddori.keygo.common.response.FailResponse;
 import maddori.keygo.common.response.ResponseCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 
@@ -21,7 +22,10 @@ public class GlobalExceptionHandler {
         return FailResponse.toResponseEntity(INTERNAL_SERVER_ERROR);
     }
 
-
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    protected ResponseEntity<BasicResponse> handleMethodArgumentNotValidException(MethodArgumentNotValidException e) {
+        return FailResponse.toResponseEntity(BAD_REQUEST);
+    }
 
 }
 
