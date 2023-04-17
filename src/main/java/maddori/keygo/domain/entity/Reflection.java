@@ -37,8 +37,8 @@ public class Reflection {
     @Enumerated(EnumType.STRING)
     private ReflectionState state;
 
-    public void endReflection() {
-        this.state = ReflectionState.Done;
+    public void updateReflectionState(ReflectionState state) {
+        this.state = state;
     }
 
 
@@ -55,6 +55,7 @@ public class Reflection {
         this.date = null;
         this.state = ReflectionState.SettingRequired;
     }
+
 
     @Builder
     public Reflection(Long id, Team team, String reflectionName, LocalDateTime date, ReflectionState state) {
