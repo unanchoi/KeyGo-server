@@ -1,5 +1,6 @@
 package maddori.keygo.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import maddori.keygo.common.response.BasicResponse;
 import maddori.keygo.common.response.FailResponse;
@@ -36,7 +37,7 @@ public class UserController {
     @PostMapping("/join-team/{teamId}")
     public ResponseEntity<? extends BasicResponse> userJoinTeam(@RequestHeader("user_id") Long userId, @PathVariable("teamId") Long teamId,
                                                                 @RequestPart("profile_image") @Nullable MultipartFile profileImage,
-                                                                UserTeamRequestDto userTeamRequestDto) throws IOException {
+                                                                @Valid @RequestBody UserTeamRequestDto userTeamRequestDto) throws IOException {
         UserTeamResponseDto userTeamResponseDto = userService.userJoinTeam(userId, teamId, profileImage, userTeamRequestDto);
         return SuccessResponse.toResponseEntity(USER_JOIN_TEAM_SUCCESS, userTeamResponseDto);
     }

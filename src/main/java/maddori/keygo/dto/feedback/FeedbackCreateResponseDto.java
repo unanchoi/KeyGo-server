@@ -1,6 +1,8 @@
 package maddori.keygo.dto.feedback;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 import lombok.Builder;
 import lombok.Data;
 import maddori.keygo.domain.entity.User;
@@ -10,11 +12,13 @@ import maddori.keygo.dto.user.UserDto;
 public class FeedbackCreateResponseDto {
 
     private Long id;
+
     private String type;
+
     private String keyword;
+
     private String content;
 
-    @JsonProperty("to_user")
     private UserDto toUser;
 
     @Builder
