@@ -62,7 +62,6 @@ public class ReflectionServiceTest {
         assertThat(dto.getReflectionStatus()).isEqualTo(ReflectionState.Done.toString());
     }
 
- }
  
    @Test
     public void deleteReflectionDetailSuccess() throws Exception {
