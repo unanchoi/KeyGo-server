@@ -25,4 +25,6 @@ public interface FeedbackRepository extends JpaRepository<Feedback, Long> {
             @Param("memberId") Long memberId,
             @Param("userId") Long userId,
             @Param("reflectionId") Long reflectionId);
+
+    public List<Feedback> findAllByReflectionId(Long relfectionId);
 }
