@@ -16,9 +16,11 @@ public class FeedbackCreateRequestDto {
     private String type;
 
     @Size(min = 1, max = 10)
+    @NotEmpty
     private String keyword;
 
     @Size(min = 1, max = 400)
+    @NotEmpty
     private String content;
     @JsonProperty("to_id")
     private Long toId;
