@@ -37,7 +37,7 @@ public class UserController {
     @PostMapping("/join-team/{teamId}")
     public ResponseEntity<? extends BasicResponse> userJoinTeam(@RequestHeader("user_id") Long userId, @PathVariable("teamId") Long teamId,
                                                                 @RequestPart("profile_image") @Nullable MultipartFile profileImage,
-                                                                @Valid @RequestBody UserTeamRequestDto userTeamRequestDto) throws IOException {
+                                                                UserTeamRequestDto userTeamRequestDto) throws IOException {
         UserTeamResponseDto userTeamResponseDto = userService.userJoinTeam(userId, teamId, profileImage, userTeamRequestDto);
         return SuccessResponse.toResponseEntity(USER_JOIN_TEAM_SUCCESS, userTeamResponseDto);
     }
