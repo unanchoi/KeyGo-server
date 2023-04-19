@@ -2,6 +2,7 @@ package maddori.keygo.dto.user;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.Size;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 
@@ -9,7 +10,6 @@ import lombok.Data;
 public class UserTeamListResponseDto {
     private Long id;
 
-    @Size(min =1, max = 10)
     @JsonProperty("team_name")
     private String teamName;
 
