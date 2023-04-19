@@ -19,6 +19,7 @@ public class FeedbackCreateResponseDto {
 
     private String content;
 
+    @JsonProperty("to_user")
     private UserDto toUser;
 
     @Builder
