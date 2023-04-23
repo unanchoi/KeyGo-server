@@ -1,19 +1,16 @@
 package maddori.keygo.service;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.google.gson.*;
+import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import maddori.keygo.common.exception.CustomException;
-import maddori.keygo.common.response.ResponseCode;
 import maddori.keygo.dto.auth.LoginRequestDto;
 import maddori.keygo.dto.auth.LoginResponseDto;
 import maddori.keygo.repository.FeedbackRepository;
 import maddori.keygo.repository.UserRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ObjectUtils;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -48,12 +45,36 @@ public class AuthService {
     public LoginResponseDto appleLogin(LoginRequestDto loginRequestDto) {
         // 공개키로 identity token 검증 (공개키 가져오기 -> 검증)
         JsonArray publicKeyList = getApplePublicKeyList();
-        PublicKey publicKey = validateIdentityToken(loginRequestDto.getToken(), publicKeyList);
+        PublicKey publicKey = makePublicKey(loginRequestDto.getToken(), publicKeyList);
+        Long userId = signInProcess(publicKey, loginRequestDto.getToken());
+
         return null;
     }
 
+    private Long signInProcess(PublicKey publicKey, String token) {
+        Claims userInfo = Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token).getBody();
+        JsonObject userInfoObject;
+        JsonParser parser = new JsonParser();
+        userInfoObject = (JsonObject) parser.parse(new Gson().toJson(userInfo));
+
+        // 이메일, sub 정보 가져오기
+        JsonElement appleSub = userInfoObject.get("sub");
+        String sub = appleSub.getAsString();
+
+        JsonElement appleEmail = userInfoObject.get("email");
+        String email = appleSub.getAsString();
+
+        // 이미 존재하는 회원 - 이메일 변경 X
+
+        // 이미 존재하는 회원 - 이메일 변경 O
+
+        // 새로운 회원
+
+        return 1L;
+    }
+
     // identity token의 kid, alg 값과 일치하는 키 정보 선택, 공개키 생성하기
-    private PublicKey validateIdentityToken(String token, JsonArray publicKeyList) {
+    private PublicKey makePublicKey(String token, JsonArray publicKeyList) {
         JsonObject selectedObject = null;
         // token의 header에서 kid, alg 정보 찾기
         String[] decodeArray = token.split("\\.");
