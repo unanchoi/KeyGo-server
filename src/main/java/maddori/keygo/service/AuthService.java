@@ -56,7 +56,6 @@ public class AuthService {
         JsonObject userInfoObject;
         JsonParser parser = new JsonParser();
         userInfoObject = (JsonObject) parser.parse(new Gson().toJson(userInfo));
-
         // 이메일, sub 정보 가져오기
         JsonElement appleSub = userInfoObject.get("sub");
         String sub = appleSub.getAsString();
