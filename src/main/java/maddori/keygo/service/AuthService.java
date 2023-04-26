@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import maddori.keygo.common.exception.CustomException;
+import maddori.keygo.domain.entity.User;
 import maddori.keygo.dto.auth.LoginRequestDto;
 import maddori.keygo.dto.auth.LoginResponseDto;
 import maddori.keygo.repository.FeedbackRepository;
@@ -51,6 +52,19 @@ public class AuthService {
         return null;
     }
 
+    // 새로운 회원 생성
+    private void createUser(String sub, String email) {
+        User user = userRepository.save(User.builder()
+                        .email(email)
+                        .sub(sub)
+                        .build());
+    }
+
+    // 이미 존재하는 회원 로그인
+    private void loginUser(User user, String sub, String email) {
+
+    }
+
     private Long signInProcess(PublicKey publicKey, String token) {
         Claims userInfo = Jwts.parser().setSigningKey(publicKey).parseClaimsJws(token).getBody();
         JsonObject userInfoObject;
@@ -61,9 +75,14 @@ public class AuthService {
         String sub = appleSub.getAsString();
 
         JsonElement appleEmail = userInfoObject.get("email");
-        String email = appleSub.getAsString();
+        String email = appleEmail.getAsString();
 
-        // 이미 존재하는 회원 - 이메일 변경 X
+        System.out.println("email = " + email);
+
+        // 이미 존재하는 회원
+        userRepository.findBySub(sub).ifPresentOrElse(
+            (result) -> loginUser(result, sub, email), () -> createUser(sub, email)
+        );
 
         // 이미 존재하는 회원 - 이메일 변경 O
 
