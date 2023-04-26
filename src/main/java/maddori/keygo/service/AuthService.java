@@ -54,15 +54,18 @@ public class AuthService {
 
     // 새로운 회원 생성
     private void createUser(String sub, String email) {
-        User user = userRepository.save(User.builder()
+        userRepository.save(User.builder()
                         .email(email)
                         .sub(sub)
                         .build());
     }
 
-    // 이미 존재하는 회원 로그인
-    private void loginUser(User user, String sub, String email) {
-
+    // 이미 존재하는 회원 로그인 - 이메일 변경시 이메일 정보 업데이트
+    private void loginUser(User user, String email) {
+        if (user.getEmail() != email) { // 이메일 변경시 업데이트
+            user.updateEmail(email);
+            userRepository.save(user);
+        }
     }
 
     private Long signInProcess(PublicKey publicKey, String token) {
@@ -79,14 +82,12 @@ public class AuthService {
 
         System.out.println("email = " + email);
 
-        // 이미 존재하는 회원
+        // 이미 존재하는 회원 - 이메일 업데이트, 존재하지 않는 회원 - 새로 생성
         userRepository.findBySub(sub).ifPresentOrElse(
-            (result) -> loginUser(result, sub, email), () -> createUser(sub, email)
+            (result) -> loginUser(result, email), () -> createUser(sub, email)
         );
 
-        // 이미 존재하는 회원 - 이메일 변경 O
-
-        // 새로운 회원
+        //
 
         return 1L;
     }
