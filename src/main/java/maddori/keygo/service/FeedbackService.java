@@ -5,15 +5,17 @@ import maddori.keygo.common.exception.CustomException;
 import maddori.keygo.common.response.ResponseCode;
 import maddori.keygo.domain.CssType;
 import maddori.keygo.domain.entity.Feedback;
+import maddori.keygo.domain.entity.Reflection;
+import maddori.keygo.domain.entity.User;
 import maddori.keygo.domain.entity.UserTeam;
-import maddori.keygo.dto.feedback.FeedbackResponseDto;
-import maddori.keygo.dto.feedback.FeedbackUpdateRequestDto;
-import maddori.keygo.dto.feedback.FeedbackUpdateResponseDto;
-import maddori.keygo.dto.feedback.FeedbackUserAndTeamResponseDto;
+import maddori.keygo.dto.feedback.*;
 import maddori.keygo.dto.user.UserDto;
 import maddori.keygo.repository.FeedbackRepository;
+import maddori.keygo.repository.ReflectionRepository;
+import maddori.keygo.repository.UserRepository;
 import maddori.keygo.repository.UserTeamRepository;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +26,10 @@ public class FeedbackService {
     private final FeedbackRepository feedbackRepository;
 
     private final UserTeamRepository userTeamRepository;
+
+    private final UserRepository userRepository;
+
+    private final ReflectionRepository reflectionRepository;
 
     public void delete(Long TeamId, Long reflectionId, Long feedbackId) {
         feedbackRepository.deleteById(feedbackId);
@@ -121,6 +127,42 @@ public class FeedbackService {
                 .userFeedbackList(userFeedbackList)
                 .teamFeedbackList(teamFeedbackList)
                 .build();
+    }
+
+    @Transactional
+    public FeedbackCreateResponseDto createFeedback(FeedbackCreateRequestDto dto, Long teamId, Long reflectionId, Long userId) {
+        User toUser = userRepository.findById(dto.getToId())
+                .orElseThrow(() -> new CustomException(ResponseCode.USER_NOT_EXIST));
+
+        User fromUser = userRepository.findById(userId).get();
+
+        Reflection reflection = reflectionRepository.findById(reflectionId).get();
+
+        Feedback feedback = Feedback.builder()
+                .type(toType(dto.getType()))
+                .keyword(dto.getKeyword())
+                .content(dto.getContent())
+                .toUser(toUser)
+                .fromUser(fromUser)
+                .reflection(reflection)
+                .build();
+        feedbackRepository.save(feedback);
+
+        UserTeam userTeam = userTeamRepository.findUserTeamsByUserIdAndTeamId(
+                feedback.getToUser().getId(), teamId).get();
+
+
+        FeedbackCreateResponseDto feedbackResponseDto = FeedbackCreateResponseDto.builder()
+                .id(feedback.getId())
+                .type(feedback.getType().getValue())
+                .keyword(feedback.getKeyword())
+                .content(feedback.getContent())
+                .toUser(UserDto.builder()
+                        .id(feedback.getToUser().getId())
+                        .nickname(userTeam.getNickname())
+                        .build())
+                .build();
+        return feedbackResponseDto;
     }
 
     private CssType toType(String type) {
