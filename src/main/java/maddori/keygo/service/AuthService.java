@@ -5,6 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import maddori.keygo.common.exception.CustomException;
+import maddori.keygo.common.util.JwtHandler;
 import maddori.keygo.domain.entity.User;
 import maddori.keygo.dto.auth.LoginRequestDto;
 import maddori.keygo.dto.auth.LoginResponseDto;
@@ -32,6 +33,7 @@ import static maddori.keygo.common.response.ResponseCode.*;
 @Service
 @RequiredArgsConstructor
 public class AuthService {
+    private final JwtHandler jwtHandler;
     private final UserRepository userRepository;
     private final FeedbackRepository feedbackRepository;
 
@@ -49,23 +51,33 @@ public class AuthService {
         PublicKey publicKey = makePublicKey(loginRequestDto.getToken(), publicKeyList);
         Long userId = signInProcess(publicKey, loginRequestDto.getToken());
 
-        return null;
+        // token 발급
+        String accessToken = jwtHandler.createAccessToken(userId);
+        String refreshToken = jwtHandler.createRefreshToken();
+
+        return LoginResponseDto.builder()
+                .accessToken(accessToken)
+                .refreshToken(refreshToken)
+                .build();
     }
 
+
     // 새로운 회원 생성
-    private void createUser(String sub, String email) {
-        userRepository.save(User.builder()
+    private User createUser(String sub, String email) {
+        User user = userRepository.save(User.builder()
                         .email(email)
                         .sub(sub)
                         .build());
+        return user;
     }
 
     // 이미 존재하는 회원 로그인 - 이메일 변경시 이메일 정보 업데이트
-    private void loginUser(User user, String email) {
+    private User loginUser(User user, String email) {
         if (user.getEmail() != email) { // 이메일 변경시 업데이트
             user.updateEmail(email);
             userRepository.save(user);
         }
+        return user;
     }
 
     private Long signInProcess(PublicKey publicKey, String token) {
@@ -80,16 +92,17 @@ public class AuthService {
         JsonElement appleEmail = userInfoObject.get("email");
         String email = appleEmail.getAsString();
 
-        System.out.println("email = " + email);
-
         // 이미 존재하는 회원 - 이메일 업데이트, 존재하지 않는 회원 - 새로 생성
+        final User[] user = new User[1];
         userRepository.findBySub(sub).ifPresentOrElse(
-            (result) -> loginUser(result, email), () -> createUser(sub, email)
+            (result) -> {
+                user[0] = loginUser(result, email);
+            }, () -> {
+                user[0] = createUser(sub, email);
+            }
         );
 
-        //
-
-        return 1L;
+        return user[0].getId();
     }
 
     // identity token의 kid, alg 값과 일치하는 키 정보 선택, 공개키 생성하기

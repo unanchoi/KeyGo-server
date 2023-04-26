@@ -29,7 +29,7 @@ public enum ResponseCode {
 
     // auth
     SIGN_IN_SUCCESS(HttpStatus.OK, true, "유저 로그인 성공"),
-    SIGN_UP_SUCCESS(HttpStatus.CREATED, true, "유저 회원가입과 로그인 성공"),
+    SIGN_UP_SUCCESS(HttpStatus.CREATED, true, "유저 회원가입 및 로그인 성공"),
     DELETE_USER_SUCCESS(HttpStatus.OK, true, "유저 정보 삭제 성공"),
     IDENTITY_TOKEN_INVALID(HttpStatus.BAD_REQUEST, false, "유효한 형식의 IDENTITY TOKEN 아닙니다."),
 
