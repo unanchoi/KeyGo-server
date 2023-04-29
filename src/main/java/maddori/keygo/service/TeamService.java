@@ -33,6 +33,7 @@ public class TeamService {
     private final TeamRepository teamRepository;
     private final ReflectionRepository reflectionRepository;
     private final UserTeamRepository userTeamRepository;
+    private final ImageHandler imageHandler;
 
     @Transactional(readOnly = true)
     public TeamResponseDto getCertainTeam(String teamId) {
@@ -73,7 +74,7 @@ public class TeamService {
         teamRepository.save(team);
 
         // 프로필 이미지 업로드
-        String profileImagePath = (profileImage == null) ? null : ImageHandler.imageUpload(profileImage);
+        String profileImagePath = (profileImage == null) ? null : imageHandler.imageUpload(profileImage);
 
         // userteam 테이블 업데이트
         UserTeam userTeam = userTeamRepository.save(UserTeam.builder()

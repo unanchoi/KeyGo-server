@@ -30,6 +30,7 @@ public class UserService {
     private final UserRepository userRepository;
     private final UserTeamRepository userTeamRepository;
     private final TeamRepository teamRepository;
+    private final ImageHandler imageHandler;
 
     @Transactional(readOnly = true)
     public List<UserTeamListResponseDto> getUserTeamList(Long userId) {
@@ -53,7 +54,7 @@ public class UserService {
         // 이미 합류한 팀인지 체크
         if (userTeamRepository.findUserTeamsByUserIdAndTeamId(userId, teamId).isPresent()) throw new CustomException(ALREADY_TEAM_MEMBER);
 
-        String profileImagePath = (profileImage == null) ? null : ImageHandler.imageUpload(profileImage);
+        String profileImagePath = (profileImage == null) ? null : imageHandler.imageUpload(profileImage);
 
         // userteam 테이블 업데이트
         UserTeam userTeam = userTeamRepository.save(UserTeam.builder()
@@ -84,7 +85,7 @@ public class UserService {
     @Transactional
     public void userLeaveTeam(Long userId, Long teamId) {
         // 프로필 이미지 삭제
-        ImageHandler.imageDelete(userTeamRepository.findUserTeamsByUserIdAndTeamId(userId, teamId).get().getProfileImagePath());
+        imageHandler.imageDelete(userTeamRepository.findUserTeamsByUserIdAndTeamId(userId, teamId).get().getProfileImagePath());
         // userteam에서 데이터 삭제
         userTeamRepository.deleteByUserIdAndTeamId(userId, teamId);
     }
