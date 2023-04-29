@@ -11,8 +11,8 @@ import java.util.Date;
 public class JwtHandler {
     private final Environment environment;
     private final String secretKey;
-    private final Long accessExpiration = 1000L * 60 * 60 * 24 * 365;
-    private final Long refreshExpiration = 1000L * 60 * 60 * 24 * 365 * 2;
+    private static final Long accessExpiration = 1000L * 60 * 60 * 24 * 365;
+    private static final Long refreshExpiration = 1000L * 60 * 60 * 24 * 365 * 2;
 
     public JwtHandler(Environment environment) {
         this.environment = environment;
