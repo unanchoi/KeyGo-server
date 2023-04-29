@@ -85,7 +85,7 @@ public class UserService {
     @Transactional
     public void userLeaveTeam(Long userId, Long teamId) {
         // 프로필 이미지 삭제
-//        imageHandler.imageDelete(userTeamRepository.findUserTeamsByUserIdAndTeamId(userId, teamId).get().getProfileImagePath());
+        imageHandler.imageDeleteS3(userTeamRepository.findUserTeamsByUserIdAndTeamId(userId, teamId).get().getProfileImagePath());
         // userteam에서 데이터 삭제
         userTeamRepository.deleteByUserIdAndTeamId(userId, teamId);
     }

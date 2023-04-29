@@ -10,6 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URLDecoder;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
@@ -75,17 +76,23 @@ public class ImageHandler {
     public String imageUploadS3(MultipartFile profileImage) throws IOException {
         File localFile = imageUpload(profileImage); // 로컬에 파일 업로드
         String fileName = localFile.getName();
-        System.out.println("here1");
+
         // S3에 업로드
         amazonS3Client.putObject(
                 new PutObjectRequest(bucket, fileName, localFile)
         );
-        System.out.println("here2");
 
         // 로컬의 이미지 삭제
         imageDelete(localFile);
-        System.out.println("here3");
+
         return amazonS3Client.getUrl(bucket, fileName).toString();
     }
+
+    // S3 이미지 삭제
+    public void imageDeleteS3(String path) {
+        String key = URLDecoder.decode(path.split("/")[3]);
+        amazonS3Client.deleteObject(bucket, key);
+    }
+
 
 }
