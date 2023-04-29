@@ -74,7 +74,7 @@ public class TeamService {
         teamRepository.save(team);
 
         // 프로필 이미지 업로드
-        String profileImagePath = (profileImage == null) ? null : imageHandler.imageUpload(profileImage);
+        String profileImagePath = (profileImage == null) ? null : imageHandler.imageUploadS3(profileImage);
 
         // userteam 테이블 업데이트
         UserTeam userTeam = userTeamRepository.save(UserTeam.builder()
