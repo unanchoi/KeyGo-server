@@ -1,5 +1,6 @@
 package maddori.keygo.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import maddori.keygo.common.response.BasicResponse;
 import maddori.keygo.common.response.FailResponse;
