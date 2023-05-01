@@ -31,3 +31,9 @@ spring:
       enabled: true
     restart:
       enabled: true
+
+cloud:
+  aws:
+    s3:
+      bucket: keygo
+      stack.auto: false
