@@ -13,6 +13,10 @@ public interface ReflectionRepository extends JpaRepository<Reflection, Long> {
 
     public Optional<Reflection> findById(Long reflectionId);
 
+
     public Optional<Reflection> findByIdAndState(Long reflectionId, ReflectionState state);
+
+    public Optional<Reflection> findByTeamIdAndState(Long teamId, ReflectionState state);
+
 
 }

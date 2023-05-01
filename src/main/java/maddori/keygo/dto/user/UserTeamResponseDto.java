@@ -1,5 +1,6 @@
 package maddori.keygo.dto.user;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
@@ -14,8 +15,11 @@ public class UserTeamResponseDto {
     @JsonProperty("profile_image_path")
     private String profileImagePath;
 
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     @JsonProperty("user_id")
     private Long userId;
+
+    @JsonInclude(JsonInclude.Include.NON_NULL)
     private TeamResponseDto team;
 
     @Builder
@@ -26,5 +30,13 @@ public class UserTeamResponseDto {
         this.profileImagePath = profileImagePath;
         this.userId = userId;
         this.team = team;
+    }
+
+    @Builder
+    public UserTeamResponseDto(Long id, String nickname, String role, String profileImagePath) {
+        this.id = id;
+        this.nickname = nickname;
+        this.role = role;
+        this.profileImagePath = profileImagePath;
     }
 }

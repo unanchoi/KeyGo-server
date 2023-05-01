@@ -7,10 +7,7 @@ import maddori.keygo.domain.ReflectionState;
 import maddori.keygo.domain.entity.Reflection;
 import maddori.keygo.domain.entity.User;
 import maddori.keygo.domain.entity.UserTeam;
-import maddori.keygo.dto.team.CreateTeamRequestDto;
-import maddori.keygo.dto.team.TeamNameResponseDto;
-import maddori.keygo.dto.team.TeamRequestDto;
-import maddori.keygo.dto.team.TeamResponseDto;
+import maddori.keygo.dto.team.*;
 import maddori.keygo.domain.entity.Team;
 import maddori.keygo.dto.user.UserTeamResponseDto;
 import maddori.keygo.repository.ReflectionRepository;
@@ -22,7 +19,9 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import static maddori.keygo.common.response.ResponseCode.*;
 
@@ -111,6 +110,25 @@ public class TeamService {
         return TeamNameResponseDto.
                 builder().id(team.getId())
                 .teamName(team.getTeamName())
+                .build();
+    }
+
+    // 팀 멤버 리스트 가져오기
+    @Transactional(readOnly = true)
+    public TeamMemberListResponseDto getTeamMembers(Long teamId) {
+
+        List<UserTeamResponseDto> userTeamList = userTeamRepository.findUserTeamsByTeamId(teamId)
+                .stream()
+                .map(userTeam -> UserTeamResponseDto.builder()
+                        .id(userTeam.getUser().getId())
+                        .nickname(userTeam.getNickname())
+                        .role(userTeam.getRole())
+                        .profileImagePath(userTeam.getProfileImagePath())
+                        .build())
+                .collect(Collectors.toList());
+
+        return TeamMemberListResponseDto.builder()
+                .members(userTeamList)
                 .build();
     }
 

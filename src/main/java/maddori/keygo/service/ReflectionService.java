@@ -4,17 +4,22 @@ import lombok.RequiredArgsConstructor;
 import maddori.keygo.common.exception.CustomException;
 import maddori.keygo.common.response.ResponseCode;
 import maddori.keygo.domain.ReflectionState;
+import maddori.keygo.domain.entity.Feedback;
 import maddori.keygo.domain.entity.Reflection;
 import maddori.keygo.domain.entity.Team;
+import maddori.keygo.dto.reflection.ReflectionCurrentResponseDto;
 import maddori.keygo.dto.reflection.ReflectionResponseDto;
 import maddori.keygo.dto.reflection.ReflectionUpdateRequestDto;
 import maddori.keygo.dto.reflection.ReflectionUpdateResponseDto;
+import maddori.keygo.repository.FeedbackRepository;
 import maddori.keygo.repository.ReflectionRepository;
+import maddori.keygo.repository.TeamRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.sql.Ref;
 import java.util.List;
@@ -25,6 +30,10 @@ import java.util.stream.Collectors;
 public class ReflectionService {
 
     private final ReflectionRepository reflectionRepository;
+
+    private final FeedbackRepository feedbackRepository;
+
+    private final TeamRepository teamRepository;
 
     @Transactional(readOnly = true)
     public List<ReflectionResponseDto> getPastReflectionList(Long teamId) {
@@ -49,7 +58,7 @@ public class ReflectionService {
                 .orElseThrow(
                 () -> new CustomException(ResponseCode.GET_REFLECTION_FAIL));
 
-        reflection.endReflection();
+        reflection.updateReflectionState(ReflectionState.Done);
 
         Reflection nextReflection = Reflection.builder()
                 .team(reflection.getTeam())
@@ -69,7 +78,7 @@ public class ReflectionService {
                 .build();
     }
 
-
+    @Transactional
     public ReflectionUpdateResponseDto updateReflectionDetail(Long teamId, Long reflectionId, ReflectionUpdateRequestDto requestDto) {
         Reflection reflection =  reflectionRepository.findById(reflectionId)
                 .orElseThrow(() -> new CustomException(ResponseCode.GET_REFLECTION_FAIL));
@@ -87,6 +96,29 @@ public class ReflectionService {
     }
 
     @Transactional
+    public ReflectionCurrentResponseDto getCurrentReflectionDetail(Long teamId) {
+        Team team = teamRepository.findById(teamId).get();
+        Long currentReflectionId = team.getCurrentReflection().getId();
+
+    Reflection reflection = reflectionRepository.findById(currentReflectionId)
+            .orElseThrow(() -> new CustomException(ResponseCode.GET_REFLECTION_FAIL));
+
+    List<String> keywordList = new ArrayList<>();
+
+    List<Feedback> feedbackList = feedbackRepository.findAllByReflectionId(reflection.getId());
+        for (int i=0; i < feedbackList.size(); i++) {
+            keywordList.add(feedbackList.get(i).getKeyword());
+        }
+
+        return ReflectionCurrentResponseDto.builder()
+                .id(reflection.getId())
+                .reflectionName(reflection.getReflectionName())
+                .reflectionDate(reflection.getDate().toString())
+                .reflectionStatus(reflection.getState().toString())
+                .reflectionKeywords(keywordList)
+                .build();
+    }
+
     public ReflectionResponseDto deleteReflectionDetail(Long reflectionId, Long teamId) {
 
         Reflection reflection = reflectionRepository.findById(reflectionId)
@@ -103,5 +135,4 @@ public class ReflectionService {
                 .teamId(teamId)
                 .build();
     }
-
 }
