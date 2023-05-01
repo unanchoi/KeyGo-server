@@ -1,6 +1,7 @@
 package maddori.keygo.controller;
 
 import com.nimbusds.jose.shaded.gson.Gson;
+import jakarta.validation.Valid;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -54,7 +55,7 @@ public class ReflectionController {
     public ResponseEntity<? extends BasicResponse> updateReflectionDetail(
             @PathVariable("team_id") Long teamId,
             @PathVariable("reflection_id") Long reflectionId,
-            @RequestBody ReflectionUpdateRequestDto reflectionUpdateRequestDto
+            @Valid @RequestBody ReflectionUpdateRequestDto reflectionUpdateRequestDto
     ) {
         ReflectionUpdateResponseDto responseDto = reflectionService.updateReflectionDetail(teamId, reflectionId, reflectionUpdateRequestDto);
         return SuccessResponse.toResponseEntity(ResponseCode.UPDATE_REFLECTION_DETAIL_SUCCESS, responseDto);

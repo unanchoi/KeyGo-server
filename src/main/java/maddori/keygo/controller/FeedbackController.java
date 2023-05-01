@@ -1,5 +1,6 @@
 package maddori.keygo.controller;
 
+import jakarta.validation.Valid;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -26,7 +27,7 @@ public class FeedbackController {
     public ResponseEntity<? extends BasicResponse> createFeedback(
             @PathVariable("teamId") Long teamId,
             @PathVariable("reflectionId") Long reflectionId,
-            @RequestBody FeedbackCreateRequestDto feedbackCreateRequestDto,
+            @Valid @RequestBody FeedbackCreateRequestDto feedbackCreateRequestDto,
             Long userId
     ) {
         FeedbackCreateResponseDto responseDto = feedbackService.createFeedback(feedbackCreateRequestDto, teamId, reflectionId, userId);
@@ -49,7 +50,7 @@ public class FeedbackController {
             @PathVariable("teamId") Long teamId,
             @PathVariable("reflectionId") Long reflectionId,
             @PathVariable("feedbackId") Long feedbackId,
-            @RequestBody FeedbackUpdateRequestDto feedbackUpdateRequestDto
+            @Valid @RequestBody FeedbackUpdateRequestDto feedbackUpdateRequestDto
     ) {
         FeedbackUpdateResponseDto responseDto = feedbackService.update(teamId, reflectionId, feedbackId, feedbackUpdateRequestDto);
         return SuccessResponse.toResponseEntity(ResponseCode.UPDATE_FEEDBACK_SUCCESS, responseDto);
