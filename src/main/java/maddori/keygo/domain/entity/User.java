@@ -30,4 +30,8 @@ public class User {
         this.email = email;
         this.sub = sub;
     }
+
+    public void updateEmail(String email) {
+        this.email = email;
+    }
 }
