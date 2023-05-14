@@ -5,7 +5,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import lombok.RequiredArgsConstructor;
 import maddori.keygo.common.exception.CustomException;
-import maddori.keygo.common.util.JwtHandler;
+import maddori.keygo.security.JwtHandler;
 import maddori.keygo.domain.entity.User;
 import maddori.keygo.dto.auth.LoginRequestDto;
 import maddori.keygo.dto.auth.LoginResponseDto;

@@ -1,4 +1,4 @@
-package maddori.keygo.common.util;
+package maddori.keygo.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
