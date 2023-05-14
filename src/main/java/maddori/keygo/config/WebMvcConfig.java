@@ -1,17 +1,15 @@
 package maddori.keygo.config;
 
 import maddori.keygo.security.JwtAuthenticationInterceptor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.*;
 
 @Configuration
 public class WebMvcConfig implements WebMvcConfigurer {
 
-    private final String secretKey;
-
-    public WebMvcConfig(String secretKey) {
-        this.secretKey = secretKey;
-    }
+    @Value("{jwt.secret}")
+    private String secretKey;
 
     // 정적 리소스 핸들러 추가
     @Override
