@@ -2,6 +2,7 @@ package maddori.keygo.common.exception;
 
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.JwtException;
+import io.jsonwebtoken.SignatureException;
 import maddori.keygo.common.response.BasicResponse;
 import maddori.keygo.common.response.FailResponse;
 import maddori.keygo.common.response.ResponseCode;
@@ -20,7 +21,7 @@ public class GlobalExceptionHandler {
         return FailResponse.toResponseEntity(e.getResponseCode());
     }
 
-    @ExceptionHandler(JwtException.class)
+    @ExceptionHandler({JwtException.class, java.security.SignatureException.class})
     protected ResponseEntity<BasicResponse> handleJwtException(Exception e) {
         if (e.getClass().equals(ExpiredJwtException.class)){
             return FailResponse.toResponseEntity(TOKEN_EXPIRED);

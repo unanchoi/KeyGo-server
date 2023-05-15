@@ -24,17 +24,13 @@ public class JwtAuthenticationInterceptor implements HandlerInterceptor {
 
         // accessToken 유효성 검사
         if (accessToken != null) {
-            try {
-                // JWT 토큰 디코딩
-                Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody();
+            // JWT 토큰 디코딩
+            Claims claims = Jwts.parser().setSigningKey(secretKey).parseClaimsJws(accessToken).getBody();
 
-                // 인증 정보 저장
-                JwtAuthenticationToken auth = new JwtAuthenticationToken(claims, accessToken, refreshToken);
-                SecurityContextHolder.getContext().setAuthentication(auth);
+            // 인증 정보 저장
+            JwtAuthenticationToken auth = new JwtAuthenticationToken(claims, accessToken, refreshToken);
+            SecurityContextHolder.getContext().setAuthentication(auth);
 
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
         } else {
             throw new CustomException(ResponseCode.NO_TOKEN);
         }
