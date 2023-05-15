@@ -10,6 +10,7 @@ import maddori.keygo.common.response.ResponseCode;
 import maddori.keygo.common.response.SuccessResponse;
 import maddori.keygo.dto.feedback.*;
 import maddori.keygo.dto.reflection.ReflectionResponseDto;
+import maddori.keygo.security.SecurityService;
 import maddori.keygo.service.FeedbackService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -27,10 +28,9 @@ public class FeedbackController {
     public ResponseEntity<? extends BasicResponse> createFeedback(
             @PathVariable("teamId") Long teamId,
             @PathVariable("reflectionId") Long reflectionId,
-            @Valid @RequestBody FeedbackCreateRequestDto feedbackCreateRequestDto,
-            Long userId
+            @Valid @RequestBody FeedbackCreateRequestDto feedbackCreateRequestDto
     ) {
-        FeedbackCreateResponseDto responseDto = feedbackService.createFeedback(feedbackCreateRequestDto, teamId, reflectionId, userId);
+        FeedbackCreateResponseDto responseDto = feedbackService.createFeedback(feedbackCreateRequestDto, teamId, reflectionId, SecurityService.getCurrentUserId());
         return SuccessResponse.toResponseEntity(ResponseCode.CREATE_FEEDBACK_SUCCESS, responseDto);
     }
 
@@ -60,10 +60,9 @@ public class FeedbackController {
     public ResponseEntity<? extends BasicResponse> getCertainTypeFeedbackAll(
             @RequestParam("type") String type,
             @PathVariable("teamId") Long teamId,
-            @PathVariable("reflection_id") Long reflectionId,
-            Long userId
+            @PathVariable("reflection_id") Long reflectionId
     ) {
-        List<FeedbackResponseDto> responseDtoList = feedbackService.getFeedbackList(type, teamId, reflectionId, userId);
+        List<FeedbackResponseDto> responseDtoList = feedbackService.getFeedbackList(type, teamId, reflectionId, SecurityService.getCurrentUserId());
         FeedbackListResponseDto responseData = FeedbackListResponseDto.builder()
                 .feedback(responseDtoList)
                 .build();
@@ -72,13 +71,12 @@ public class FeedbackController {
 
     @GetMapping("/{teamId}/reflections/{reflectionId}/feedbacks/from-team")
     public ResponseEntity<? extends BasicResponse> getTeamAndUserFeedback(
-            Long userId,
             @RequestParam("members") Long memberId,
             @PathVariable("teamId") Long teamId,
             @PathVariable("reflectionId") Long reflectionId
     ) {
         FeedbackUserAndTeamResponseDto responseDto =
-                feedbackService.getUserAndTeamFeedbackList(userId, teamId, reflectionId, memberId);
+                feedbackService.getUserAndTeamFeedbackList(SecurityService.getCurrentUserId(), teamId, reflectionId, memberId);
         return SuccessResponse.toResponseEntity(ResponseCode.GET_FEEDBACK_SUCCESS, responseDto);
     }
 

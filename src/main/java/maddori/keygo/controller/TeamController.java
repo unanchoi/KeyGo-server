@@ -9,6 +9,7 @@ import maddori.keygo.common.response.SuccessResponse;
 import maddori.keygo.dto.team.*;
 import maddori.keygo.dto.user.UserTeamRequestDto;
 import maddori.keygo.dto.user.UserTeamResponseDto;
+import maddori.keygo.security.SecurityService;
 import maddori.keygo.service.TeamService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.Nullable;
@@ -40,13 +41,12 @@ public class TeamController {
     }
 
     @PostMapping("")
-    public ResponseEntity<? extends BasicResponse> createTeam(@RequestHeader("user_id") Long userId,
-                                                                @RequestPart("profile_image") @Nullable MultipartFile profileImage,
+    public ResponseEntity<? extends BasicResponse> createTeam(@RequestPart("profile_image") @Nullable MultipartFile profileImage,
                                                                 @RequestParam Map<String, String> params) throws IOException {
         // reference: https://tailerbox.tistory.com/30
         ObjectMapper mapper = new ObjectMapper();
         CreateTeamRequestDto createTeamRequestDto = mapper.convertValue(params, CreateTeamRequestDto.class);
-        UserTeamResponseDto userTeamResponseDto = teamService.createTeamAndJoinTeam(userId, profileImage, createTeamRequestDto);
+        UserTeamResponseDto userTeamResponseDto = teamService.createTeamAndJoinTeam(SecurityService.getCurrentUserId(), profileImage, createTeamRequestDto);
         return SuccessResponse.toResponseEntity(CREATE_JOIN_TEAM_SUCCESS, userTeamResponseDto);
     }
 
