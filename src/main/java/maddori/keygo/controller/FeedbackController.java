@@ -23,12 +23,12 @@ public class FeedbackController {
 
     private final FeedbackService feedbackService;
 
-    @PostMapping( "{team_id}/reflections/{reflection_id}/feedbacks")
+    @PostMapping( "{teamId}/reflections/{reflectionId}/feedbacks")
     public ResponseEntity<? extends BasicResponse> createFeedback(
             @PathVariable("teamId") Long teamId,
             @PathVariable("reflectionId") Long reflectionId,
             @Valid @RequestBody FeedbackCreateRequestDto feedbackCreateRequestDto,
-            Long userId
+            @RequestHeader Long userId
     ) {
         FeedbackCreateResponseDto responseDto = feedbackService.createFeedback(feedbackCreateRequestDto, teamId, reflectionId, userId);
         return SuccessResponse.toResponseEntity(ResponseCode.CREATE_FEEDBACK_SUCCESS, responseDto);
