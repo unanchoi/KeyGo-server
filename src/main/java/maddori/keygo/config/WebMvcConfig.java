@@ -9,7 +9,11 @@ import org.springframework.web.servlet.config.annotation.*;
 public class WebMvcConfig implements WebMvcConfigurer {
 
     @Value("${jwt.secret}")
-    private String secretKey;
+    private final String secretKey;
+
+    public WebMvcConfig(@Value("${jwt.secret}") String secretKey) {
+        this.secretKey = secretKey;
+    }
 
     // 정적 리소스 핸들러 추가
     @Override
@@ -22,7 +26,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     // 유저 인증 위한 인터셉터 추가
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        System.out.println("secretKey = " + secretKey);
         registry.addInterceptor(new JwtAuthenticationInterceptor(secretKey))
                 .excludePathPatterns("/api/v2/auth")
                 .addPathPatterns("/**");
