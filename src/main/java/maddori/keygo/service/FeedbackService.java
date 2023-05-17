@@ -4,16 +4,10 @@ import lombok.RequiredArgsConstructor;
 import maddori.keygo.common.exception.CustomException;
 import maddori.keygo.common.response.ResponseCode;
 import maddori.keygo.domain.CssType;
-import maddori.keygo.domain.entity.Feedback;
-import maddori.keygo.domain.entity.Reflection;
-import maddori.keygo.domain.entity.User;
-import maddori.keygo.domain.entity.UserTeam;
+import maddori.keygo.domain.entity.*;
 import maddori.keygo.dto.feedback.*;
 import maddori.keygo.dto.user.UserDto;
-import maddori.keygo.repository.FeedbackRepository;
-import maddori.keygo.repository.ReflectionRepository;
-import maddori.keygo.repository.UserRepository;
-import maddori.keygo.repository.UserTeamRepository;
+import maddori.keygo.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,8 +18,9 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 public class FeedbackService {
     private final FeedbackRepository feedbackRepository;
-
     private final UserTeamRepository userTeamRepository;
+
+    private final TeamRepository teamRepository;
 
     private final UserRepository userRepository;
 
@@ -131,26 +126,22 @@ public class FeedbackService {
 
     @Transactional
     public FeedbackCreateResponseDto createFeedback(FeedbackCreateRequestDto dto, Long teamId, Long reflectionId, Long userId) {
-        User toUser = userRepository.findById(dto.getToId())
-                .orElseThrow(() -> new CustomException(ResponseCode.USER_NOT_EXIST));
-
-        User fromUser = userRepository.findById(userId).get();
-
-        Reflection reflection = reflectionRepository.findById(reflectionId).get();
+        User toUser = getUserById(dto.getToId());
+        User fromUser = getUserById(userId);
+        Reflection reflection = getReflectionById(reflectionId);
 
         Feedback feedback = Feedback.builder()
                 .type(toType(dto.getType()))
                 .keyword(dto.getKeyword())
                 .content(dto.getContent())
                 .toUser(toUser)
+                .team(getTeamById(teamId))
                 .fromUser(fromUser)
                 .reflection(reflection)
                 .build();
         feedbackRepository.save(feedback);
 
-        UserTeam userTeam = userTeamRepository.findUserTeamsByUserIdAndTeamId(
-                feedback.getToUser().getId(), teamId).get();
-
+        UserTeam userTeam = getUserTeamByUserIdAndTeamId(feedback.getToUser().getId(), teamId);
 
         FeedbackCreateResponseDto feedbackResponseDto = FeedbackCreateResponseDto.builder()
                 .id(feedback.getId())
@@ -165,6 +156,20 @@ public class FeedbackService {
         return feedbackResponseDto;
     }
 
+    private Reflection getReflectionById(Long reflectionId) {
+        return reflectionRepository.findById(reflectionId)
+                .orElseThrow(() -> new CustomException(ResponseCode.GET_REFLECTION_FAIL));
+    }
+    private UserTeam getUserTeamByUserIdAndTeamId(Long userId, Long teamId) {
+        return userTeamRepository.findUserTeamsByUserIdAndTeamId(userId, teamId)
+                .orElseThrow(() -> new CustomException(ResponseCode.TEAM_NOT_EXIST));
+    }
+
+    private User getUserById(Long userId) {
+            return userRepository.findById(userId)
+                .orElseThrow(() -> new CustomException(ResponseCode.USER_NOT_EXIST));
+    }
+
     private CssType toType(String type) {
         CssType value = switch (type)
         {
@@ -175,6 +180,10 @@ public class FeedbackService {
         return value;
     }
 
+    private Team getTeamById(Long teamId) {
+        return teamRepository.findById(teamId).orElseThrow(
+                () -> new CustomException(ResponseCode.TEAM_NOT_EXIST));
+    }
     private String category(Long userId, Long memberId) {
         if (userId == memberId) {
             return "self";

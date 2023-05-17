@@ -24,7 +24,7 @@ public class FeedbackController {
 
     private final FeedbackService feedbackService;
 
-    @PostMapping( "{team_id}/reflections/{reflection_id}/feedbacks")
+    @PostMapping( "{teamId}/reflections/{reflectionId}/feedbacks")
     public ResponseEntity<? extends BasicResponse> createFeedback(
             @PathVariable("teamId") Long teamId,
             @PathVariable("reflectionId") Long reflectionId,
