@@ -12,7 +12,6 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.env.Environment;
 
 @Configuration
-@RequiredArgsConstructor
 public class S3Config {
 
     private final static String region = "ap-northeast-2";
@@ -22,6 +21,11 @@ public class S3Config {
 
     @Value("${s3.secretKey}")
     private final String secretKey;
+
+    public S3Config(@Value("${s3.accessKey}") String accessKey, @Value("${s3.secretKey}") String secretKey) {
+        this.accessKey = accessKey;
+        this.secretKey = secretKey;
+    }
 
     @Bean
     public AmazonS3Client amazonS3Client() {

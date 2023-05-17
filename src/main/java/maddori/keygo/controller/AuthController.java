@@ -7,6 +7,7 @@ import maddori.keygo.common.response.SuccessResponse;
 import maddori.keygo.dto.auth.LoginRequestDto;
 import maddori.keygo.dto.auth.LoginResponseDto;
 import maddori.keygo.dto.team.TeamResponseDto;
+import maddori.keygo.security.SecurityService;
 import maddori.keygo.service.AuthService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,8 +21,8 @@ public class AuthController {
     private final AuthService authService;
 
     @DeleteMapping("/signOut")
-    public ResponseEntity<? extends BasicResponse> signOut(@RequestHeader("user_id") Long userId) {
-        authService.deleteUser(userId);
+    public ResponseEntity<? extends BasicResponse> signOut() {
+        authService.deleteUser(SecurityService.getCurrentUserId());
         return NoDetailSuccessResponse.toResponseEntity(DELETE_USER_SUCCESS);
     }
 
