@@ -42,4 +42,16 @@ public class UserTeam {
         this.profileImagePath = profileImagePath;
         this.admin = admin;
     }
+
+    public void updateProfileImagePath(String profileImagePath) {
+        this.profileImagePath = profileImagePath;
+    }
+
+    public void updateNickname(String nickname) {
+        this.nickname = nickname;
+    }
+
+    public void updateRole(String role) {
+        this.role = role;
+    }
 }

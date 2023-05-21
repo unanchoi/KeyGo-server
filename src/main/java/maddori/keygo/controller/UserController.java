@@ -48,4 +48,12 @@ public class UserController {
         userService.userLeaveTeam(SecurityService.getCurrentUserId(), teamId);
         return NoDetailSuccessResponse.toResponseEntity(WITHDRAW_TEAM_SUCCESS);
     }
+
+    @PatchMapping("teams/{teamId}/profile")
+    public ResponseEntity<? extends BasicResponse> editProfile(@PathVariable("teamId") Long teamId,
+                                                               @RequestPart("profile_image") @Nullable MultipartFile profileImage,
+                                                               UserTeamRequestDto userTeamRequestDto) throws IOException {
+        UserTeamResponseDto userTeamResponseDto = userService.editProfile(SecurityService.getCurrentUserId(), teamId, profileImage, userTeamRequestDto);
+        return SuccessResponse.toResponseEntity(USER_UPDATE_PROFILE_SUCCESS, userTeamResponseDto);
+    }
 }
