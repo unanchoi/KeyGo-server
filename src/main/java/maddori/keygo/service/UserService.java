@@ -66,7 +66,7 @@ public class UserService {
                         .profileImagePath(profileImagePath)
                         .build());
 
-        UserTeamResponseDto response = UserTeamResponseDto.builder()
+        return UserTeamResponseDto.builder()
                 .id(userTeam.getId())
                 .nickname(userTeam.getNickname())
                 .role(userTeam.getRole())
@@ -78,8 +78,6 @@ public class UserService {
                         .invitationCode(team.getInvitationCode())
                         .build())
                 .build();
-
-        return response;
     }
 
 
@@ -89,5 +87,34 @@ public class UserService {
         imageHandler.imageDeleteS3(userTeamRepository.findUserTeamsByUserIdAndTeamId(userId, teamId).get().getProfileImagePath());
         // userteam에서 데이터 삭제
         userTeamRepository.deleteByUserIdAndTeamId(userId, teamId);
+    }
+
+    public UserTeamResponseDto editProfile(Long userId, Long teamId, MultipartFile profileImage, UserTeamRequestDto requestDto) throws IOException {
+        // 유저 정보
+        userRepository.findById(userId).orElseThrow(() -> new CustomException(USER_NOT_EXIST));
+        // 팀의 존재 여부 체크
+        teamRepository.findById(teamId).orElseThrow(() -> new CustomException(TEAM_NOT_EXIST));
+        // 유저가 팀에 속해있는지 체크
+        UserTeam userTeam = userTeamRepository.findUserTeamsByUserIdAndTeamId(userId, teamId).orElseThrow(() -> new CustomException(USER_NOT_TEAM_MEMBER));
+
+        // 이미지, 닉네임, 역할 변경사항 존재한다면 업데이트
+        if (profileImage != null) {
+            if (userTeam.getProfileImagePath() != null) imageHandler.imageDeleteS3(userTeam.getProfileImagePath());
+            userTeam.updateProfileImagePath(imageHandler.imageUploadS3(profileImage));
+        }
+        if (requestDto.getNickname() != null) {
+            userTeam.updateNickname(requestDto.getNickname());
+        }
+        if (requestDto.getRole() != null) {
+            userTeam.updateRole(requestDto.getRole());
+        }
+        userTeamRepository.save(userTeam);
+
+        return UserTeamResponseDto.builder()
+                .id(userId)
+                .nickname(userTeam.getNickname())
+                .role(userTeam.getRole())
+                .profileImagePath(userTeam.getProfileImagePath())
+                .build();
     }
 }

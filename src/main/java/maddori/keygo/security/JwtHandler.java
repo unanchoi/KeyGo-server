@@ -2,21 +2,20 @@ package maddori.keygo.security;
 
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import org.springframework.core.env.Environment;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.util.Date;
 
 @Component
 public class JwtHandler {
-    private final Environment environment;
+    @Value("${jwt.secret}")
     private final String secretKey;
     private static final Long accessExpiration = 1000L * 60 * 60 * 24 * 365;
     private static final Long refreshExpiration = 1000L * 60 * 60 * 24 * 365 * 2;
 
-    public JwtHandler(Environment environment) {
-        this.environment = environment;
-        this.secretKey = environment.getProperty("jwt.secret");
+    public JwtHandler(@Value("${jwt.secret}") String secretKey) {
+        this.secretKey = secretKey;
     }
 
     // accessToken 생성
