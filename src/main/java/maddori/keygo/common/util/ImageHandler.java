@@ -90,6 +90,7 @@ public class ImageHandler {
 
     // S3 이미지 삭제
     public void imageDeleteS3(String path) {
+        if (path == null) return;
         String key = URLDecoder.decode(path.split("/")[3]);
         amazonS3Client.deleteObject(bucket, key);
     }

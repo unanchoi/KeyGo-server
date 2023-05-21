@@ -13,9 +13,12 @@ public class UserTeamListResponseDto {
     @JsonProperty("team_name")
     private String teamName;
 
+    private String nickname;
+
     @Builder
-    public UserTeamListResponseDto(Long id, String teamName) {
+    public UserTeamListResponseDto(Long id, String teamName, String nickname) {
         this.id = id;
         this.teamName = teamName;
+        this.nickname = nickname;
     }
 }
