@@ -39,6 +39,7 @@ public class UserService {
                         .map(r -> UserTeamListResponseDto.builder()
                                         .id(r.getTeam().getId())
                                         .teamName(r.getTeam().getTeamName())
+                                        .nickname(r.getNickname())
                                         .build())
                         .collect(Collectors.toList());
 
