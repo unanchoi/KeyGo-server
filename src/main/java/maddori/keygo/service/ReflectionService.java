@@ -89,7 +89,7 @@ public class ReflectionService {
         return ReflectionUpdateResponseDto.builder()
                 .id(reflection.getId())
                 .reflectionName(reflection.getReflectionName())
-                .reflectionDate(reflection.getDate().toString())
+                .reflectionDate(reflection.getDate())
                 .reflectionState(reflection.getState().toString())
                 .teamId(reflection.getTeam().getId())
                 .build();
@@ -113,7 +113,7 @@ public class ReflectionService {
         return ReflectionCurrentResponseDto.builder()
                 .id(reflection.getId())
                 .reflectionName(reflection.getReflectionName())
-                .reflectionDate(reflection.getDate().toString())
+                .reflectionDate(reflection.getDate())
                 .reflectionStatus(reflection.getState().toString())
                 .reflectionKeywords(keywordList)
                 .build();
