@@ -1,5 +1,6 @@
 package maddori.keygo.dto.reflection;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Builder;
 import lombok.Data;
@@ -14,6 +15,7 @@ public class ReflectionResponseDto {
 
     @JsonProperty("reflection_name")
     private String reflectionName;
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime date;
     private ReflectionState state;
 
