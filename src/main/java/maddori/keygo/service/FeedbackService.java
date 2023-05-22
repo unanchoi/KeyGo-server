@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import maddori.keygo.common.exception.CustomException;
 import maddori.keygo.common.response.ResponseCode;
 import maddori.keygo.domain.CssType;
+import maddori.keygo.domain.ReflectionState;
 import maddori.keygo.domain.entity.*;
 import maddori.keygo.dto.feedback.*;
 import maddori.keygo.dto.reflection.ReflectionResponseDto;
@@ -18,6 +19,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class FeedbackService {
     private final FeedbackRepository feedbackRepository;
@@ -29,11 +31,18 @@ public class FeedbackService {
 
     private final ReflectionRepository reflectionRepository;
 
+    private final ReflectionStateValidator reflectionStateValidator;
+
     public void delete(Long TeamId, Long reflectionId, Long feedbackId) {
+        reflectionStateValidator.validate(reflectionId, ReflectionState.SettingRequired);
+        reflectionStateValidator.validate(reflectionId, ReflectionState.Before);
         feedbackRepository.deleteById(feedbackId);
     }
 
+    @Transactional
     public FeedbackUpdateResponseDto update(Long TeamId, Long reflectionId, Long feedbackId, FeedbackUpdateRequestDto feedbackUpdateRequestDto) {
+        reflectionStateValidator.validate(reflectionId, ReflectionState.SettingRequired);
+        reflectionStateValidator.validate(reflectionId, ReflectionState.Before);
         Feedback feedback = feedbackRepository.findById(feedbackId)
                 .orElseThrow(() -> new CustomException(ResponseCode.FEEDBACK_NOT_EXIST));
 
@@ -62,6 +71,7 @@ public class FeedbackService {
         return feedbackUpdateResponseDto;
     }
 
+    @Transactional
     public List<FeedbackResponseDto> getFeedbackList(String type, Long teamId, Long reflectionId, Long userId) {
 
         UserTeam userTeam = userTeamRepository.findUserTeamsByUserIdAndTeamId(userId, teamId)
@@ -86,6 +96,8 @@ public class FeedbackService {
     // TODO: userID 맞춰서 수정.
     public FeedbackUserAndTeamResponseDto getUserAndTeamFeedbackList(Long userId, Long teamId, Long reflectionId, Long memberId) {
         // 팀의 회고 중에서, 본인이 쓴 feedback
+        reflectionStateValidator.validate(reflectionId, ReflectionState.Progressing);
+        reflectionStateValidator.validate(reflectionId, ReflectionState.Done);
 
         UserTeam userTeam = userTeamRepository.findUserTeamsByUserIdAndTeamId(userId, teamId)
                 .orElseThrow(() -> new CustomException(ResponseCode.TEAM_NOT_EXIST));
@@ -129,6 +141,8 @@ public class FeedbackService {
 
     @Transactional
     public FeedbackCreateResponseDto createFeedback(FeedbackCreateRequestDto dto, Long teamId, Long reflectionId, Long userId) {
+        reflectionStateValidator.validate(reflectionId, ReflectionState.SettingRequired);
+        reflectionStateValidator.validate(reflectionId, ReflectionState.Before);
         User toUser = getUserById(dto.getToId());
         User fromUser = getUserById(userId);
         Reflection reflection = getReflectionById(reflectionId);
@@ -163,6 +177,9 @@ public class FeedbackService {
     public FeedbackFromMeToMemberResponseDto getFromMeToMemberFeedbackList(Long userId, Long teamId, Long memberId) {
         UserTeam toUser = getUserTeamByUserIdAndTeamId(memberId, teamId);
         Reflection reflection = getReflectionById(getTeamById(teamId).getCurrentReflection().getId());
+        reflectionStateValidator.validate(reflection.getId(), ReflectionState.Progressing);
+        reflectionStateValidator.validate(reflection.getId(), ReflectionState.SettingRequired);
+        reflectionStateValidator.validate(reflection.getId(), ReflectionState.Before);
 
         Map<CssType, List<FeedbackContentResponseDto>> feedbackContentByType =
                 feedbackRepository.findAllByToUserIdAndFromUserIdAndReflectionId(memberId, userId, reflection.getId())
@@ -196,10 +213,12 @@ public class FeedbackService {
                 .build();
     }
 
+
     private Reflection getReflectionById(Long reflectionId) {
         return reflectionRepository.findById(reflectionId)
                 .orElseThrow(() -> new CustomException(ResponseCode.GET_REFLECTION_FAIL));
     }
+
     private UserTeam getUserTeamByUserIdAndTeamId(Long userId, Long teamId) {
         return userTeamRepository.findUserTeamsByUserIdAndTeamId(userId, teamId)
                 .orElseThrow(() -> new CustomException(ResponseCode.TEAM_NOT_EXIST));

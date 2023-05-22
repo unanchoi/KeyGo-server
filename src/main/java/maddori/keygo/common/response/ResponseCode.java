@@ -46,6 +46,7 @@ public enum ResponseCode {
     DELETE_REFLECTION_DETAIL_SUCCESS(HttpStatus.OK, true, "회고 디테일 정보 삭제 성공"),
     GET_REFLECTION_LIST_SUCCESS(HttpStatus.OK, true, "회고목록 조회 성공"),
     GET_REFLECTION_LIST_FAIL(HttpStatus.BAD_REQUEST, false, "회고목록 조회 실패"),
+    INVALID_REFLECTION_TYPE(HttpStatus.BAD_REQUEST, false, "회고 타입이 잘못됨"),
 
     END_REFLECTION_SUCCESS(HttpStatus.OK, true, "회고 종료 성공"),
     GET_CURRENT_REFLECTION_SUCCESS(HttpStatus.OK, true, "현재 회고 정보 가져오기 성공"),

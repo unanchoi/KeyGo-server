@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Entity
 @Getter
 @NoArgsConstructor
@@ -28,6 +31,9 @@ public class Team {
 
     @Column(length = 10, nullable = false)
     private String teamName;
+
+    @OneToMany(mappedBy = "team", cascade = CascadeType.ALL)
+    private List<Reflection> reflections = new ArrayList<>();
 
     @Builder
     public Team(Long id, String invitationCode, String teamName) {
