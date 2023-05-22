@@ -9,6 +9,7 @@ import maddori.keygo.common.response.BasicResponse;
 import maddori.keygo.common.response.FailResponse;
 import maddori.keygo.common.response.ResponseCode;
 import maddori.keygo.common.response.SuccessResponse;
+import maddori.keygo.dto.reflection.ReflectionCurrentResponseDto;
 import maddori.keygo.dto.reflection.ReflectionResponseDto;
 import maddori.keygo.dto.reflection.ReflectionUpdateRequestDto;
 import maddori.keygo.dto.reflection.ReflectionUpdateResponseDto;
@@ -64,8 +65,8 @@ public class ReflectionController {
     @GetMapping("{team_id}/reflections/current")
     public ResponseEntity<? extends  BasicResponse> getCurrentReflectionDetail(
         @PathVariable("team_id") Long teamId){
-        reflectionService.getCurrentReflectionDetail(teamId);
-        return SuccessResponse.toResponseEntity(ResponseCode.GET_CURRENT_REFLECTION_SUCCESS, null);
+        ReflectionCurrentResponseDto responseDto = reflectionService.getCurrentReflectionDetail(teamId);
+        return SuccessResponse.toResponseEntity(ResponseCode.GET_CURRENT_REFLECTION_SUCCESS, responseDto);
     }
 
     @DeleteMapping("{team_id}/reflections/{reflection_id}")
