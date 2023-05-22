@@ -196,7 +196,7 @@ public class FeedbackService {
 
         return FeedbackFromMeToMemberResponseDto.builder()
                 .toUser(UserDto.builder()
-                        .id(toUser.getId())
+                        .id(toUser.getUser().getId())
                         .nickname(toUser.getNickname())
                         .build())
                 .reflection(ReflectionResponseDto.builder()
