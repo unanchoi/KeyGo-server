@@ -17,6 +17,7 @@ import maddori.keygo.service.ReflectionService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -31,8 +32,10 @@ public class ReflectionController {
             @PathVariable("teamId") Long teamId
     ) {
         List<ReflectionResponseDto> reflectionResponseDtoList = reflectionService.getPastReflectionList(teamId);
+        List<List<ReflectionResponseDto>> nestedReflectionResponseDtoList = new ArrayList<>();
+        nestedReflectionResponseDtoList.add(reflectionResponseDtoList);
         ReflectionListResponseDto responseData = ReflectionListResponseDto.builder()
-                .reflection(reflectionResponseDtoList)
+                .reflection(nestedReflectionResponseDtoList)
                 .build();
 
         return SuccessResponse.toResponseEntity(ResponseCode.GET_REFLECTION_LIST_SUCCESS, responseData);
@@ -76,7 +79,7 @@ public class ReflectionController {
     @Data
     @Builder
     public static class ReflectionListResponseDto {
-        private List<ReflectionResponseDto> reflection;
+        private List<List<ReflectionResponseDto>> reflection;
     }
 }
 

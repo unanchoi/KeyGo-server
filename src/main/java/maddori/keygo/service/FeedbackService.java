@@ -197,7 +197,7 @@ public class FeedbackService {
 
         return FeedbackFromMeToMemberResponseDto.builder()
                 .toUser(UserDto.builder()
-                        .id(toUser.getId())
+                        .id(toUser.getUser().getId())
                         .nickname(toUser.getNickname())
                         .build())
                 .reflection(ReflectionResponseDto.builder()
@@ -243,7 +243,7 @@ public class FeedbackService {
                 () -> new CustomException(ResponseCode.TEAM_NOT_EXIST));
     }
     private String category(Long userId, Long memberId) {
-        if (userId == memberId) {
+        if (userId.equals(memberId)) {
             return "self";
         } else {
             return "others";

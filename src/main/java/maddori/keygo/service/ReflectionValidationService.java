@@ -24,6 +24,7 @@ public class ReflectionValidationService{
     }
 
     public void updateState(Reflection reflection) {
+        if (reflection.getDate() == null) return;
         if (LocalDateTime.now().isAfter(reflection.getDate()) || LocalDateTime.now().isEqual(reflection.getDate())) {
             reflection.updateReflectionState(Progressing);
         }

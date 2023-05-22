@@ -39,9 +39,9 @@ public class AuthService {
 
     @Transactional
     public void deleteUser(Long userId) {
+        feedbackRepository.fromUserSetNull(userId);
         userRepository.delete(userRepository.findById(userId).orElseThrow(() ->
                                                     new CustomException(USER_NOT_EXIST)));
-        feedbackRepository.fromUserSetNull(userId);
     }
 
     @Transactional
