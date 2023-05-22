@@ -12,6 +12,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @NoArgsConstructor
@@ -37,6 +39,8 @@ public class Reflection {
     @Enumerated(EnumType.STRING)
     private ReflectionState state;
 
+    @OneToMany(mappedBy = "reflection", cascade = CascadeType.ALL)
+    private List<Feedback> feedbacks = new ArrayList<>();
     public void updateReflectionState(ReflectionState state) {
         this.state = state;
     }
