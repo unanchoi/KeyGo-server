@@ -20,7 +20,7 @@ public class ReflectionStateValidator {
                 .orElseThrow(() -> new CustomException(ResponseCode.GET_REFLECTION_FAIL));
 
         if (reflection.getState() != state) {
-            throw new CustomException("회고 상태가 일치하지 않습니다.");
+            throw new CustomException(ResponseCode.REFLECTION_STATUS_ERROR);
         }
     }
 }
