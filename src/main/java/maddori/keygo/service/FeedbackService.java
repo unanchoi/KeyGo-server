@@ -14,9 +14,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static maddori.keygo.domain.ReflectionState.*;
 
 @Service
 @Transactional(readOnly = true)
@@ -34,15 +37,15 @@ public class FeedbackService {
     private final ReflectionStateValidator reflectionStateValidator;
 
     public void delete(Long TeamId, Long reflectionId, Long feedbackId) {
-        reflectionStateValidator.validate(reflectionId, ReflectionState.SettingRequired);
-        reflectionStateValidator.validate(reflectionId, ReflectionState.Before);
+        reflectionStateValidator.validate(reflectionId, Arrays.asList(SettingRequired, Before));
+
         feedbackRepository.deleteById(feedbackId);
     }
 
     @Transactional
     public FeedbackUpdateResponseDto update(Long TeamId, Long reflectionId, Long feedbackId, FeedbackUpdateRequestDto feedbackUpdateRequestDto) {
-        reflectionStateValidator.validate(reflectionId, ReflectionState.SettingRequired);
-        reflectionStateValidator.validate(reflectionId, ReflectionState.Before);
+        reflectionStateValidator.validate(reflectionId, Arrays.asList(SettingRequired, Before));
+
         Feedback feedback = feedbackRepository.findById(feedbackId)
                 .orElseThrow(() -> new CustomException(ResponseCode.FEEDBACK_NOT_EXIST));
 
@@ -95,9 +98,7 @@ public class FeedbackService {
 
     // TODO: userID 맞춰서 수정.
     public FeedbackUserAndTeamResponseDto getUserAndTeamFeedbackList(Long userId, Long teamId, Long reflectionId, Long memberId) {
-        // 팀의 회고 중에서, 본인이 쓴 feedback
-        reflectionStateValidator.validate(reflectionId, ReflectionState.Progressing);
-        reflectionStateValidator.validate(reflectionId, ReflectionState.Done);
+        reflectionStateValidator.validate(reflectionId, Arrays.asList(Progressing, Done));
 
         UserTeam userTeam = userTeamRepository.findUserTeamsByUserIdAndTeamId(userId, teamId)
                 .orElseThrow(() -> new CustomException(ResponseCode.TEAM_NOT_EXIST));
@@ -141,8 +142,7 @@ public class FeedbackService {
 
     @Transactional
     public FeedbackCreateResponseDto createFeedback(FeedbackCreateRequestDto dto, Long teamId, Long reflectionId, Long userId) {
-        reflectionStateValidator.validate(reflectionId, ReflectionState.SettingRequired);
-        reflectionStateValidator.validate(reflectionId, ReflectionState.Before);
+        reflectionStateValidator.validate(reflectionId, Arrays.asList(Progressing, SettingRequired, Before));
         User toUser = getUserById(dto.getToId());
         User fromUser = getUserById(userId);
         Reflection reflection = getReflectionById(reflectionId);
@@ -177,9 +177,7 @@ public class FeedbackService {
     public FeedbackFromMeToMemberResponseDto getFromMeToMemberFeedbackList(Long userId, Long teamId, Long memberId) {
         UserTeam toUser = getUserTeamByUserIdAndTeamId(memberId, teamId);
         Reflection reflection = getReflectionById(getTeamById(teamId).getCurrentReflection().getId());
-        reflectionStateValidator.validate(reflection.getId(), ReflectionState.Progressing);
-        reflectionStateValidator.validate(reflection.getId(), ReflectionState.SettingRequired);
-        reflectionStateValidator.validate(reflection.getId(), ReflectionState.Before);
+        reflectionStateValidator.validate(reflection.getId(), Arrays.asList(Progressing, SettingRequired, Before));
 
         Map<CssType, List<FeedbackContentResponseDto>> feedbackContentByType =
                 feedbackRepository.findAllByToUserIdAndFromUserIdAndReflectionId(memberId, userId, reflection.getId())
