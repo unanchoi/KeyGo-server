@@ -80,6 +80,15 @@ public class FeedbackController {
         return SuccessResponse.toResponseEntity(ResponseCode.GET_FEEDBACK_SUCCESS, responseDto);
     }
 
+    @GetMapping("/{teamId}/reflections/current/feedbacks/from-me")
+    public ResponseEntity<? extends BasicResponse> getFromMeToCertainMemberFeedbackAll(
+            @RequestParam("members") Long memberId,
+            @PathVariable("teamId") Long teamId
+    ) {
+        FeedbackFromMeToMemberResponseDto responseDto = feedbackService.getFromMeToMemberFeedbackList(SecurityService.getCurrentUserId(), teamId, memberId);
+        return SuccessResponse.toResponseEntity(ResponseCode.GET_FEEDBACK_LIST_TO_SPECIFIC_MEMBER_SUCCESS, responseDto);
+    }
+
     @Data
     @Builder
     public static class FeedbackListResponseDto {

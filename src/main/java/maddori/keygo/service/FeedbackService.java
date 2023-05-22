@@ -6,12 +6,15 @@ import maddori.keygo.common.response.ResponseCode;
 import maddori.keygo.domain.CssType;
 import maddori.keygo.domain.entity.*;
 import maddori.keygo.dto.feedback.*;
+import maddori.keygo.dto.reflection.ReflectionResponseDto;
 import maddori.keygo.dto.user.UserDto;
 import maddori.keygo.repository.*;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 @Service
@@ -154,6 +157,43 @@ public class FeedbackService {
                         .build())
                 .build();
         return feedbackResponseDto;
+    }
+
+    @Transactional
+    public FeedbackFromMeToMemberResponseDto getFromMeToMemberFeedbackList(Long userId, Long teamId, Long memberId) {
+        UserTeam toUser = getUserTeamByUserIdAndTeamId(memberId, teamId);
+        Reflection reflection = getReflectionById(getTeamById(teamId).getCurrentReflection().getId());
+
+        Map<CssType, List<FeedbackContentResponseDto>> feedbackContentByType =
+                feedbackRepository.findAllByToUserIdAndFromUserIdAndReflectionId(memberId, userId, reflection.getId())
+                        .stream()
+                        .collect(Collectors.groupingBy(
+                                Feedback::getType,
+                                Collectors.mapping(
+                                        feedback -> FeedbackContentResponseDto.builder()
+                                                .id(feedback.getId())
+                                                .keyword(feedback.getKeyword())
+                                                .content(feedback.getContent())
+                                                .build(),
+                                        Collectors.toList()
+                                )
+                        ));
+
+        return FeedbackFromMeToMemberResponseDto.builder()
+                .toUser(UserDto.builder()
+                        .id(toUser.getId())
+                        .nickname(toUser.getNickname())
+                        .build())
+                .reflection(ReflectionResponseDto.builder()
+                        .id(reflection.getId())
+                        .reflectionName(reflection.getReflectionName())
+                        .date(reflection.getDate())
+                        .state(reflection.getState())
+                        .teamId(reflection.getTeam().getId())
+                        .build())
+                .continueType(feedbackContentByType.getOrDefault(toType("Continue"), new ArrayList<>()))
+                .stopType(feedbackContentByType.getOrDefault(toType("Stop"), new ArrayList<>()))
+                .build();
     }
 
     private Reflection getReflectionById(Long reflectionId) {
