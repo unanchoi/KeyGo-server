@@ -15,7 +15,10 @@ import java.util.List;
 import static maddori.keygo.domain.ReflectionState.Progressing;
 
 @Service
+@RequiredArgsConstructor
 public class ReflectionValidationService{
+
+    private final ReflectionRepository reflectionRepository;
 
     public void validateState(Reflection reflection, List<ReflectionState> state) {
         if (!state.contains(reflection.getState())) {
@@ -27,6 +30,7 @@ public class ReflectionValidationService{
         if (reflection.getDate() == null) return;
         if (LocalDateTime.now().isAfter(reflection.getDate()) || LocalDateTime.now().isEqual(reflection.getDate())) {
             reflection.updateReflectionState(Progressing);
+            reflectionRepository.save(reflection);
         }
     }
 

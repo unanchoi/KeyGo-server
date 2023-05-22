@@ -83,7 +83,6 @@ public class ReflectionService {
         Long currentReflectionId = team.getCurrentReflection().getId();
         Reflection reflection = reflectionRepository.findById(currentReflectionId).orElseThrow(() -> new CustomException(ResponseCode.GET_REFLECTION_FAIL));
         reflectionStateValidationService.updateState(reflection);
-        reflectionStateValidationService.validateState(reflection, Arrays.asList(SettingRequired, Before));
 
         List<String> keywordList = new ArrayList<>();
 
