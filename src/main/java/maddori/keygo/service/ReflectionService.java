@@ -18,8 +18,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static maddori.keygo.domain.ReflectionState.*;
 
 @Service
 @RequiredArgsConstructor
@@ -31,7 +34,7 @@ public class ReflectionService {
 
     private final TeamRepository teamRepository;
 
-    private final ReflectionStateValidator reflectionStateValidator;
+    private final ReflectionValidationService reflectionStateValidationService;
 
     @Transactional(readOnly = true)
     public List<ReflectionResponseDto> getPastReflectionList(Long teamId) {
@@ -44,12 +47,14 @@ public class ReflectionService {
 
     @Transactional
     public ReflectionResponseDto endReflection(Long teamId, Long reflectionId) {
-        reflectionStateValidator.validate(reflectionId, ReflectionState.Progressing);
         Reflection reflection = reflectionRepository.findById(reflectionId).orElseThrow(() -> new CustomException(ResponseCode.GET_REFLECTION_FAIL));
+        reflectionStateValidationService.updateState(reflection);
+        reflectionStateValidationService.validateState(reflection,Arrays.asList(ReflectionState.SettingRequired, ReflectionState.Before, ReflectionState.Progressing));
 
         reflection.updateReflectionState(ReflectionState.Done);
 
         Reflection nextReflection = Reflection.builder().team(reflection.getTeam()).state(ReflectionState.SettingRequired).build();
+        reflectionRepository.save(nextReflection);
 
         Team team = reflection.getTeam();
         team.updateRecentReflection(reflection);
@@ -60,22 +65,25 @@ public class ReflectionService {
 
     @Transactional
     public ReflectionUpdateResponseDto updateReflectionDetail(Long teamId, Long reflectionId, ReflectionUpdateRequestDto requestDto) {
-        reflectionStateValidator.validate(reflectionId, ReflectionState.SettingRequired);
-        reflectionStateValidator.validate(reflectionId, ReflectionState.Before);
+        reflectionStateValidationService.validateRequestTime(requestDto.getReflectionDate());
         Reflection reflection = reflectionRepository.findById(reflectionId).orElseThrow(() -> new CustomException(ResponseCode.GET_REFLECTION_FAIL));
+        reflectionStateValidationService.validateState(reflection, Arrays.asList(SettingRequired, Before));
+        reflectionStateValidationService.updateState(reflection);
+
         reflection.updateReflectionName(requestDto.getReflectionName());
         reflection.updateReflectionDate(requestDto.getReflectionDate());
-        reflectionRepository.save(reflection);
+        reflection.updateReflectionState(ReflectionState.Before);
 
         return ReflectionUpdateResponseDto.builder().id(reflection.getId()).reflectionName(reflection.getReflectionName()).reflectionDate(reflection.getDate()).reflectionState(reflection.getState().toString()).teamId(reflection.getTeam().getId()).build();
     }
 
     @Transactional
     public ReflectionCurrentResponseDto getCurrentReflectionDetail(Long teamId) {
-        Team team = teamRepository.findById(teamId).get();
+        Team team = teamRepository.findById(teamId).orElseThrow(() -> new CustomException(ResponseCode.GET_TEAM_FAIL));
         Long currentReflectionId = team.getCurrentReflection().getId();
-
         Reflection reflection = reflectionRepository.findById(currentReflectionId).orElseThrow(() -> new CustomException(ResponseCode.GET_REFLECTION_FAIL));
+        reflectionStateValidationService.updateState(reflection);
+        reflectionStateValidationService.validateState(reflection, Arrays.asList(SettingRequired, Before));
 
         List<String> keywordList = new ArrayList<>();
 
@@ -87,11 +95,9 @@ public class ReflectionService {
         return ReflectionCurrentResponseDto.builder().id(reflection.getId()).reflectionName(reflection.getReflectionName()).reflectionDate(reflection.getDate()).reflectionStatus(reflection.getState().toString()).reflectionKeywords(keywordList).build();
     }
 
-    public ReflectionResponseDto deleteReflectionDetail(Long reflectionId, Long teamId) {
-        reflectionStateValidator.validate(reflectionId, ReflectionState.SettingRequired);
-        reflectionStateValidator.validate(reflectionId, ReflectionState.Before);
+    public ReflectionResponseDto deleteReflectionDetail(Long teamId, Long reflectionId) {
         Reflection reflection = reflectionRepository.findById(reflectionId).orElseThrow(() -> new CustomException(ResponseCode.GET_REFLECTION_FAIL));
-
+        reflectionStateValidationService.validateState(reflection, Arrays.asList(SettingRequired, Before));
         reflection.deleteInfo();
         reflectionRepository.save(reflection);
         return ReflectionResponseDto.builder().id(reflection.getId()).reflectionName(reflection.getReflectionName()).date(reflection.getDate()).state(reflection.getState()).teamId(teamId).build();
