@@ -4,10 +4,7 @@ import jakarta.validation.Valid;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
-import maddori.keygo.common.response.BasicResponse;
-import maddori.keygo.common.response.FailResponse;
-import maddori.keygo.common.response.ResponseCode;
-import maddori.keygo.common.response.SuccessResponse;
+import maddori.keygo.common.response.*;
 import maddori.keygo.dto.feedback.*;
 import maddori.keygo.dto.reflection.ReflectionResponseDto;
 import maddori.keygo.security.SecurityService;
@@ -41,7 +38,7 @@ public class FeedbackController {
             @PathVariable("feedbackId") Long feedbackId
     ) {
         feedbackService.delete(teamId, reflectionId, feedbackId);
-        return SuccessResponse.toResponseEntity(ResponseCode.DELETE_FEEDBACK_SUCCESS, null);
+        return NoDetailSuccessResponse.toResponseEntity(ResponseCode.DELETE_FEEDBACK_SUCCESS);
 
     }
 
