@@ -242,7 +242,7 @@ public class FeedbackService {
                 () -> new CustomException(ResponseCode.TEAM_NOT_EXIST));
     }
     private String category(Long userId, Long memberId) {
-        if (userId == memberId) {
+        if (userId.equals(memberId)) {
             return "self";
         } else {
             return "others";
