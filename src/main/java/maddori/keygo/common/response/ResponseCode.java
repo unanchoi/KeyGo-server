@@ -47,6 +47,7 @@ public enum ResponseCode {
     GET_REFLECTION_LIST_SUCCESS(HttpStatus.OK, true, "회고목록 조회 성공"),
     GET_REFLECTION_LIST_FAIL(HttpStatus.BAD_REQUEST, false, "회고목록 조회 실패"),
     INVALID_REFLECTION_TYPE(HttpStatus.BAD_REQUEST, false, "회고 타입이 잘못됨"),
+    UPDATE_REFLECTION_TIME_FAIL(HttpStatus.BAD_REQUEST, false, "회고 시간이 올바르지 않습니다."),
 
     END_REFLECTION_SUCCESS(HttpStatus.OK, true, "회고 종료 성공"),
     GET_CURRENT_REFLECTION_SUCCESS(HttpStatus.OK, true, "현재 회고 정보 가져오기 성공"),
@@ -60,6 +61,7 @@ public enum ResponseCode {
     GET_TEAM_MEMBER_LIST_SUCCESS(HttpStatus.OK, true, "팀의 멤버 목록 가져오기 성공"),
     EDIT_TEAM_NAME_SUCCESS(HttpStatus.OK, true, "팀 이름 수정 성공"),
     CREATE_JOIN_TEAM_SUCCESS(HttpStatus.CREATED, true, "팀 생성 및 팀 합류 완료"),
+    GET_TEAM_FAIL(HttpStatus.BAD_REQUEST, false, "팀 정보 가져오기 실패"),
 
     // feedback
     CREATE_FEEDBACK_SUCCESS(HttpStatus.CREATED, true, "피드백 생성하기 성공"),
