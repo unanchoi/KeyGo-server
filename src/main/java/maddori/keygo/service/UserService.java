@@ -89,6 +89,7 @@ public class UserService {
         userTeamRepository.deleteByUserIdAndTeamId(userId, teamId);
     }
 
+    @Transactional
     public UserTeamResponseDto editProfile(Long userId, Long teamId, MultipartFile profileImage, UserTeamRequestDto requestDto) throws IOException {
         // 유저 정보
         userRepository.findById(userId).orElseThrow(() -> new CustomException(USER_NOT_EXIST));
@@ -108,7 +109,6 @@ public class UserService {
         if (requestDto.getRole() != null) {
             userTeam.updateRole(requestDto.getRole());
         }
-        userTeamRepository.save(userTeam);
 
         return UserTeamResponseDto.builder()
                 .id(userId)

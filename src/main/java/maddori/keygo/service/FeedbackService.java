@@ -59,7 +59,6 @@ public class FeedbackService {
                 feedbackUpdateRequestDto.getKeyword(),
                 feedbackUpdateRequestDto.getContent()
         );
-        feedbackRepository.save(feedback);
 
         UserTeam userTeam  =  userTeamRepository.findUserTeamsByUserIdAndTeamId(feedback.getToUser().getId(), TeamId)
                 .orElseThrow(() -> new CustomException(ResponseCode.TEAM_NOT_EXIST));
@@ -78,7 +77,7 @@ public class FeedbackService {
                 .build();
     }
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<FeedbackResponseDto> getFeedbackList(String type, Long teamId, Long reflectionId, Long userId) {
         Reflection reflection = getReflectionById(reflectionId);
         reflectionValidationService.validateState(reflection, Arrays.asList(Done));
@@ -151,7 +150,7 @@ public class FeedbackService {
     public FeedbackCreateResponseDto createFeedback(FeedbackCreateRequestDto dto, Long teamId, Long reflectionId, Long userId) {
         Reflection reflection = getReflectionById(reflectionId);
         reflectionValidationService.updateState(reflection);
-        reflectionValidationService.validateState(reflection, Arrays.asList(Progressing, SettingRequired, Before));
+        reflectionValidationService.validateState(reflection, Arrays.asList(SettingRequired, Before));
         User toUser = getUserById(dto.getToId());
         User fromUser = getUserById(userId);
 

@@ -49,7 +49,7 @@ public class ReflectionService {
     public ReflectionResponseDto endReflection(Long teamId, Long reflectionId) {
         Reflection reflection = reflectionRepository.findById(reflectionId).orElseThrow(() -> new CustomException(ResponseCode.GET_REFLECTION_FAIL));
         reflectionStateValidationService.updateState(reflection);
-        reflectionStateValidationService.validateState(reflection,Arrays.asList(ReflectionState.SettingRequired, ReflectionState.Before, ReflectionState.Progressing));
+        reflectionStateValidationService.validateState(reflection,Arrays.asList(ReflectionState.Progressing));
 
         reflection.updateReflectionState(ReflectionState.Done);
 
@@ -67,8 +67,8 @@ public class ReflectionService {
     public ReflectionUpdateResponseDto updateReflectionDetail(Long teamId, Long reflectionId, ReflectionUpdateRequestDto requestDto) {
         reflectionStateValidationService.validateRequestTime(requestDto.getReflectionDate());
         Reflection reflection = reflectionRepository.findById(reflectionId).orElseThrow(() -> new CustomException(ResponseCode.GET_REFLECTION_FAIL));
-        reflectionStateValidationService.validateState(reflection, Arrays.asList(SettingRequired, Before));
         reflectionStateValidationService.updateState(reflection);
+        reflectionStateValidationService.validateState(reflection, Arrays.asList(SettingRequired, Before));
 
         reflection.updateReflectionName(requestDto.getReflectionName());
         reflection.updateReflectionDate(requestDto.getReflectionDate());
@@ -94,8 +94,10 @@ public class ReflectionService {
         return ReflectionCurrentResponseDto.builder().id(reflection.getId()).reflectionName(reflection.getReflectionName()).reflectionDate(reflection.getDate()).reflectionStatus(reflection.getState().toString()).reflectionKeywords(keywordList).build();
     }
 
+    @Transactional
     public ReflectionResponseDto deleteReflectionDetail(Long teamId, Long reflectionId) {
         Reflection reflection = reflectionRepository.findById(reflectionId).orElseThrow(() -> new CustomException(ResponseCode.GET_REFLECTION_FAIL));
+        reflectionStateValidationService.updateState(reflection);
         reflectionStateValidationService.validateState(reflection, Arrays.asList(SettingRequired, Before));
         reflection.deleteInfo();
         reflectionRepository.save(reflection);

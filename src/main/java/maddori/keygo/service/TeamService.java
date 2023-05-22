@@ -106,7 +106,6 @@ public class TeamService {
     public TeamNameResponseDto editTeamName(Long teamId, TeamRequestDto teamRequestDto) {
         Team team = teamRepository.findById(teamId).orElseThrow(() -> new CustomException(TEAM_NOT_EXIST));
         team.updateTeamName(teamRequestDto.getTeamName());
-        teamRepository.save(team);
 
         return TeamNameResponseDto.
                 builder().id(team.getId())
