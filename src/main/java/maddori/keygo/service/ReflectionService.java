@@ -53,6 +53,7 @@ public class ReflectionService {
         reflection.updateReflectionState(ReflectionState.Done);
 
         Reflection nextReflection = Reflection.builder().team(reflection.getTeam()).state(ReflectionState.SettingRequired).build();
+        reflectionRepository.save(nextReflection);
 
         Team team = reflection.getTeam();
         team.updateRecentReflection(reflection);
